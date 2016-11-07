@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Manager));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnMkdir = new System.Windows.Forms.Button();
             this.btnBackup = new System.Windows.Forms.Button();
             this.lblCurrentDirectory = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,7 +49,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.btnMkdir = new System.Windows.Forms.Button();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -69,6 +71,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(844, 34);
             this.panel1.TabIndex = 0;
+            // 
+            // btnMkdir
+            // 
+            this.btnMkdir.Location = new System.Drawing.Point(328, 5);
+            this.btnMkdir.Name = "btnMkdir";
+            this.btnMkdir.Size = new System.Drawing.Size(58, 22);
+            this.btnMkdir.TabIndex = 3;
+            this.btnMkdir.Text = "MKDIR";
+            this.btnMkdir.UseVisualStyleBackColor = true;
+            this.btnMkdir.Click += new System.EventHandler(this.btnMkdir_Click);
             // 
             // btnBackup
             // 
@@ -254,15 +266,9 @@
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "All Files (*.*)|*.*|Python Files (*.py)|*.*";
             // 
-            // btnMkdir
+            // serialPort1
             // 
-            this.btnMkdir.Location = new System.Drawing.Point(328, 5);
-            this.btnMkdir.Name = "btnMkdir";
-            this.btnMkdir.Size = new System.Drawing.Size(58, 22);
-            this.btnMkdir.TabIndex = 3;
-            this.btnMkdir.Text = "MKDIR";
-            this.btnMkdir.UseVisualStyleBackColor = true;
-            this.btnMkdir.Click += new System.EventHandler(this.btnMkdir_Click);
+            this.serialPort1.BaudRate = 115200;
             // 
             // Manager
             // 
@@ -310,5 +316,6 @@
         private System.Windows.Forms.Button btnBackup;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnMkdir;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }
