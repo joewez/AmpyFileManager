@@ -56,7 +56,8 @@ namespace AmpyFileManager
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " put " + SrcFile + " " + DstFile;
             p.Start();
@@ -67,7 +68,8 @@ namespace AmpyFileManager
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "ampy";
@@ -84,7 +86,8 @@ namespace AmpyFileManager
 
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " run " + RunFile;
@@ -99,7 +102,8 @@ namespace AmpyFileManager
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " rm " + DeleteFile;
             p.Start();
@@ -110,7 +114,8 @@ namespace AmpyFileManager
         {
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " mkdir " + NewDirectory;
             p.Start();
@@ -123,7 +128,8 @@ namespace AmpyFileManager
 
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " get " + file;
@@ -140,7 +146,8 @@ namespace AmpyFileManager
 
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
             p.StartInfo.Arguments = "-p " + COMM_PORT + " ls" + ((!String.IsNullOrEmpty(path)) ? " " + path : "");

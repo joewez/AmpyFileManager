@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -72,7 +73,7 @@ namespace AmpyFileManager
             if (selectedItem != "" && selectedItem != "<..>" && selectedItem.Substring(0, 1) != "<")
             {
                 string FileToDelete = (_CurrentPath == "") ? selectedItem: _CurrentPath + "/" + selectedItem;
-                if (MessageBox.Show("Are you sure you want to delete " + FileToDelete + "?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                if (MessageBox.Show("Are you sure you want to delete '" + FileToDelete + "'?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                 {
                     _ESP.DeleteFile(FileToDelete);
                     RefreshFileList();
@@ -115,7 +116,7 @@ namespace AmpyFileManager
 
         private void btnBackup_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Backup all files in current directory?", "Confirm", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (MessageBox.Show("Backup all files?", "Confirm", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 Backup();
                 MessageBox.Show("Backup complete.");
@@ -135,6 +136,7 @@ namespace AmpyFileManager
         #endregion
 
         #region Private Helper Routines
+
 
         private bool OKToContinue()
         {
@@ -227,7 +229,8 @@ namespace AmpyFileManager
             lblCurrentDirectory.Text = (_CurrentPath == "") ? "<root>" : _CurrentPath;
         }
 
-        private void Backup()
+
+        private void DirectBackup()
         {
             string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
             Directory.CreateDirectory(newBackupPath);
@@ -241,6 +244,96 @@ namespace AmpyFileManager
                     _ESP.GetFile(currentFile, LocalFile);
                 }
             }
+        }
+
+        private void Backup()
+        {
+            string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
+            Directory.CreateDirectory(newBackupPath);
+
+            string BackupCommand = Path.Combine(newBackupPath, "backup.bat");
+            MakeBackupScript(BackupCommand);
+
+            string RestoreCommand = Path.Combine(newBackupPath, "restore.bat");
+            MakeRestoreScript(RestoreCommand);
+
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            p.StartInfo.WorkingDirectory = newBackupPath;
+            p.StartInfo.FileName = BackupCommand;
+            p.Start();
+            p.WaitForExit();
+        }
+
+        private void MakeBackupScript(string output)
+        {
+            List<string> files = new List<string>();
+            addfiles("/", ref files);
+            string msg = "";            
+            foreach (string item in files)
+            {
+                if (item.StartsWith("<"))
+                {
+                    msg += item.Substring(1, item.Length - 2) + "\r\n";
+                }
+                else
+                {
+                    string revitem = item.Replace("/", "\\");
+                    msg += "ampy -p " + _ESP.COMM_PORT + " get " + item + " " + revitem.Substring(1) + "\r\n";
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(output))
+            {
+                sw.Write(msg);
+            }
+        }
+
+        private void MakeRestoreScript(string output)
+        {
+            List<string> files = new List<string>();
+            addfiles("/", ref files);
+            string msg = "";
+            foreach (string item in files)
+            {
+                if (item.StartsWith("<"))
+                {
+                    msg += "ampy -p " + _ESP.COMM_PORT + " " + item.Substring(1, item.Length - 2) + "\r\n";
+                }
+                else
+                {
+                    string revitem = item.Replace("/", "\\");
+                    msg += "ampy -p " + _ESP.COMM_PORT + " put " + revitem.Substring(1) + " " + item + "\r\n";
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(output))
+            {
+                sw.Write(msg);
+            }
+        }
+
+        private void addfiles(string path, ref List<string> files)
+        {
+            List<string> items = _ESP.GetDir(path);
+            foreach (string item in items)
+                if (!item.StartsWith("<"))
+                {
+                    if (path.EndsWith("/"))
+                        files.Add(path + item);
+                    else
+                        files.Add(path + "/" + item);
+                }
+            foreach (string item in items)
+                if (item.StartsWith("<"))
+                {
+                    string newdir = item.Substring(1, item.Length - 2);
+                    string newpath = path + newdir;
+                    if (newpath.StartsWith("/"))
+                        files.Add("<mkdir " + newpath.Substring(1) + ">");
+                    else
+                        files.Add("<mkdir " + newpath + ">");
+                    addfiles(newpath, ref files);
+                }
         }
 
         private void OpenItem()
