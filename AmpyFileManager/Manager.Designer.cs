@@ -211,7 +211,8 @@
             // scintilla1
             // 
             this.scintilla1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scintilla1.EolMode = ScintillaNET.Eol.Cr;
+            this.scintilla1.EolMode = ScintillaNET.Eol.Lf;
+            this.scintilla1.IndentationGuides = ScintillaNET.IndentView.Real;
             this.scintilla1.Lexer = ScintillaNET.Lexer.Python;
             this.scintilla1.Location = new System.Drawing.Point(0, 0);
             this.scintilla1.Name = "scintilla1";

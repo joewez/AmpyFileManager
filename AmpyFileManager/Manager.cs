@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -11,6 +12,8 @@ namespace AmpyFileManager
     public partial class Manager : Form
     {
         private const string NEW_FILENAME = "<new>";
+        private const string LF = "\n";
+        private const string CRLF = "\r\n";
         private string _BackupPath = "";
         private string _SessionPath = "";
         private string _CurrentPath = "";
@@ -194,9 +197,10 @@ namespace AmpyFileManager
                 if (File.Exists(SaveFile))
                     File.Delete(SaveFile);
 
-                using (StreamWriter sw = new StreamWriter(SaveFile))
+                using (TextWriter tw = new StreamWriter(SaveFile))
                 {
-                    sw.Write(scintilla1.Text);
+                    tw.NewLine = LF;
+                    tw.Write(scintilla1.Text.Replace(CRLF, LF));
                 }
 
                 _ESP.PutFile(SaveFile, _CurrentFile);
@@ -360,7 +364,7 @@ namespace AmpyFileManager
                 _ESP.GetFile(_CurrentFile, LocalFile);
                 using (StreamReader sr = new StreamReader(LocalFile))
                 {
-                    scintilla1.Text = sr.ReadToEnd().Replace("\r\n","");
+                    scintilla1.Text = sr.ReadToEnd().Replace("\r\n", "\n");
                 }                
                 _FileDirty = false;
                 lblCurrentFile.Text = _CurrentFile;                
