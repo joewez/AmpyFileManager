@@ -19,6 +19,7 @@ namespace AmpyFileManager
         private string _CurrentPath = "";
         private string _CurrentFile = "";
         private bool _FileDirty = false;
+        private string _readBuffer = string.Empty;
 
         private ESPRoutines _ESP;
 
@@ -39,6 +40,15 @@ namespace AmpyFileManager
 
             _SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("yyyyMMdd-hhmm"));
             Directory.CreateDirectory(_SessionPath);
+
+            txtCommand.KeyPress += (sndr, ev) =>
+            {
+                if (ev.KeyChar.Equals((char)13))
+                {
+                    SendCommand();
+                    ev.Handled = true;
+                }
+            };
 
             ConfigureForPython(scintilla1);
 
@@ -78,6 +88,7 @@ namespace AmpyFileManager
                 string FileToDelete = (_CurrentPath == "") ? selectedItem: _CurrentPath + "/" + selectedItem;
                 if (MessageBox.Show("Are you sure you want to delete '" + FileToDelete + "'?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                 {
+                    CloseComm();
                     _ESP.DeleteFile(FileToDelete);
                     RefreshFileList();
                 }
@@ -91,6 +102,7 @@ namespace AmpyFileManager
                 string newFile = openFileDialog1.FileName;
                 string newFilename = Path.GetFileName(newFile);
                 string FileToAdd = (_CurrentPath == "") ? newFilename : _CurrentPath + "/" + newFilename;
+                CloseComm();
                 _ESP.PutFile(newFile, FileToAdd);
                 RefreshFileList();
             }
@@ -102,6 +114,7 @@ namespace AmpyFileManager
             if (newdir != "")
             {
                 string newdirfull = (_CurrentPath == "") ? newdir : _CurrentPath + "/" + newdir;
+                CloseComm();
                 _ESP.CreateDir(newdirfull);
                 RefreshFileList();
             }
@@ -112,6 +125,7 @@ namespace AmpyFileManager
             string selectedItem = lstDirectory.Text;
             if (selectedItem != "" && selectedItem != "<..>" && selectedItem.Substring(0, 1) != "<")
             {
+                CloseComm();
                 string output = _ESP.RunFile(selectedItem);
                 MessageBox.Show(output, "Output");
             }
@@ -136,10 +150,88 @@ namespace AmpyFileManager
             e.Cancel = !OKToContinue();
         }
 
+        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                if (serialPort1.IsOpen)
+                {
+                    _readBuffer = serialPort1.ReadLine().Replace("\r", "\r\n") + "\r\n";
+                    this.Invoke(new EventHandler(DoUpdate));
+                }
+            }
+            catch (IOException iex)
+            {
+                Debug.WriteLine(iex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "serialPort1_DataReceived() Error");
+            }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            SendCommand();
+        }
+
+        private void btnControlC_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!serialPort1.IsOpen)
+                {
+                    serialPort1.PortName = _ESP.COMM_PORT;
+                    serialPort1.NewLine = "\r";
+                    serialPort1.Open();
+                }
+
+                if (serialPort1.IsOpen)
+                {
+                    byte[] b = { 0x03 };
+                    serialPort1.Write(b, 0, 1);
+                }
+            }
+            catch (IOException iex)
+            {
+                Debug.WriteLine(iex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "btnControlC_Click() Error");
+            }
+        }
+
+        private void btnControlD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!serialPort1.IsOpen)
+                {
+                    serialPort1.PortName = _ESP.COMM_PORT;
+                    serialPort1.NewLine = "\r";
+                    serialPort1.Open();
+                }
+
+                if (serialPort1.IsOpen)
+                {
+                    byte[] b = { 0x04 };
+                    serialPort1.Write(b, 0, 1);
+                }
+            }
+            catch (IOException iex)
+            {
+                Debug.WriteLine(iex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "btnControlC_Click() Error");
+            }
+        }
+
         #endregion
 
         #region Private Helper Routines
-
 
         private bool OKToContinue()
         {
@@ -203,6 +295,8 @@ namespace AmpyFileManager
                     tw.Write(scintilla1.Text.Replace(CRLF, LF));
                 }
 
+                CloseComm();
+
                 _ESP.PutFile(SaveFile, _CurrentFile);
 
                 _FileDirty = false;
@@ -226,6 +320,8 @@ namespace AmpyFileManager
             if (!(_CurrentPath == "" || _CurrentPath == "/"))
                 lstDirectory.Items.Add("<..>");
 
+            CloseComm();
+
             List<string> dir = _ESP.GetDir(_CurrentPath);
             foreach (string entry in dir)
                 lstDirectory.Items.Add(entry);
@@ -238,6 +334,8 @@ namespace AmpyFileManager
         {
             string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
             Directory.CreateDirectory(newBackupPath);
+
+            CloseComm();
 
             foreach (string item in lstDirectory.Items)
             {
@@ -252,6 +350,8 @@ namespace AmpyFileManager
 
         private void Backup()
         {
+            CloseComm();
+
             string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
             Directory.CreateDirectory(newBackupPath);
 
@@ -318,6 +418,7 @@ namespace AmpyFileManager
 
         private void addfiles(string path, ref List<string> files)
         {
+            CloseComm();
             List<string> items = _ESP.GetDir(path);
             foreach (string item in items)
                 if (!item.StartsWith("<"))
@@ -361,6 +462,7 @@ namespace AmpyFileManager
             {
                 _CurrentFile = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
                 string LocalFile = Path.Combine(_SessionPath, selectedItem);
+                CloseComm();
                 _ESP.GetFile(_CurrentFile, LocalFile);
                 using (StreamReader sr = new StreamReader(LocalFile))
                 {
@@ -368,6 +470,48 @@ namespace AmpyFileManager
                 }                
                 _FileDirty = false;
                 lblCurrentFile.Text = _CurrentFile;                
+            }
+        }
+
+        private void CloseComm()
+        {
+            if (serialPort1.IsOpen)
+                serialPort1.Close();
+        }
+
+        private void txtTerminal_Enter(object sender, System.EventArgs e) { }
+
+        private void txtTerminal_Leave(object sender, System.EventArgs e) { }
+
+        public void DoUpdate(object sender, System.EventArgs e)
+        {
+            txtTerminal.AppendText(_readBuffer);
+        }
+
+        private void SendCommand()
+        {
+            try
+            {
+                if (!serialPort1.IsOpen)
+                {
+                    serialPort1.PortName = _ESP.COMM_PORT;
+                    serialPort1.NewLine = "\r";
+                    serialPort1.Open();
+                }
+
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.WriteLine(txtCommand.Text);
+                    txtCommand.Text = "";
+                }
+            }
+            catch (IOException iex)
+            {
+                Debug.WriteLine(iex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SendCommand() Error");
             }
         }
 
