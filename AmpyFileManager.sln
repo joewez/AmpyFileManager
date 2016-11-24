@@ -7,14 +7,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmpyFileManager", "AmpyFile
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{4A453ABE-30F7-4E20-81D5-49814A2B558D}.SingleImage|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
