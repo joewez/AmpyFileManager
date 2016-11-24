@@ -32,7 +32,7 @@ namespace AmpyFileManager
         private void Manager_Load(object sender, EventArgs e)
         {
             _ESP = new ESPRoutines();
-            this.Text = "Ampy ESP8266 File Manager (" + _ESP.COMM_PORT + ")";
+            this.Text = "Ampy File Manager (" + _ESP.COMM_PORT + ")";
 
             _BackupPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "backups");
             if (!Directory.Exists(_BackupPath))
@@ -56,16 +56,19 @@ namespace AmpyFileManager
 
             ResetNew();
         }
+
         private void btnOpen_Click(object sender, EventArgs e)
         {
             if (OKToContinue())
                 OpenItem();
         }
+
         private void lstDirectory_DoubleClick(object sender, EventArgs e)
         {
             if (OKToContinue())
                 OpenItem();
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             bool doRefresh = (_CurrentFile == NEW_FILENAME);
@@ -89,7 +92,9 @@ namespace AmpyFileManager
                 if (MessageBox.Show("Are you sure you want to delete '" + FileToDelete + "'?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                 {
                     CloseComm();
+                    Cursor.Current = Cursors.WaitCursor;
                     _ESP.DeleteFile(FileToDelete);
+                    Cursor.Current = Cursors.Default;
                     RefreshFileList();
                 }
             }
@@ -103,7 +108,9 @@ namespace AmpyFileManager
                 string newFilename = Path.GetFileName(newFile);
                 string FileToAdd = (_CurrentPath == "") ? newFilename : _CurrentPath + "/" + newFilename;
                 CloseComm();
+                Cursor.Current = Cursors.WaitCursor;
                 _ESP.PutFile(newFile, FileToAdd);
+                Cursor.Current = Cursors.Default;
                 RefreshFileList();
             }
         }
@@ -115,7 +122,9 @@ namespace AmpyFileManager
             {
                 string newdirfull = (_CurrentPath == "") ? newdir : _CurrentPath + "/" + newdir;
                 CloseComm();
+                Cursor.Current = Cursors.WaitCursor;
                 _ESP.CreateDir(newdirfull);
+                Cursor.Current = Cursors.Default;
                 RefreshFileList();
             }
         }
@@ -126,7 +135,9 @@ namespace AmpyFileManager
             if (selectedItem != "" && selectedItem != "<..>" && selectedItem.Substring(0, 1) != "<")
             {
                 CloseComm();
+                Cursor.Current = Cursors.WaitCursor;
                 string output = _ESP.RunFile(selectedItem);
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show(output, "Output");
             }
         }
@@ -229,6 +240,27 @@ namespace AmpyFileManager
             }
         }
 
+        private void picCommStatus_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+                CloseComm();
+            else
+                OpenComm();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshFileList();
+        }
+
+        private void tmrCommStatus_Tick(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+                picCommStatus.BackColor = Color.Green;
+            else
+                picCommStatus.BackColor = Color.Red;
+        }
+
         #endregion
 
         #region Private Helper Routines
@@ -297,7 +329,11 @@ namespace AmpyFileManager
 
                 CloseComm();
 
+                Cursor.Current = Cursors.WaitCursor;
+
                 _ESP.PutFile(SaveFile, _CurrentFile);
+
+                Cursor.Current = Cursors.Default;
 
                 _FileDirty = false;
 
@@ -321,8 +357,9 @@ namespace AmpyFileManager
                 lstDirectory.Items.Add("<..>");
 
             CloseComm();
-
+            Cursor.Current = Cursors.WaitCursor;
             List<string> dir = _ESP.GetDir(_CurrentPath);
+            Cursor.Current = Cursors.Default;
             foreach (string entry in dir)
                 lstDirectory.Items.Add(entry);
 
@@ -336,7 +373,7 @@ namespace AmpyFileManager
             Directory.CreateDirectory(newBackupPath);
 
             CloseComm();
-
+            Cursor.Current = Cursors.WaitCursor;
             foreach (string item in lstDirectory.Items)
             {
                 if (!item.StartsWith("<"))
@@ -346,10 +383,13 @@ namespace AmpyFileManager
                     _ESP.GetFile(currentFile, LocalFile);
                 }
             }
+            Cursor.Current = Cursors.Default;
         }
 
         private void Backup()
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             CloseComm();
 
             string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
@@ -368,12 +408,14 @@ namespace AmpyFileManager
             p.StartInfo.FileName = BackupCommand;
             p.Start();
             p.WaitForExit();
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void MakeBackupScript(string output)
         {
             List<string> files = new List<string>();
-            addfiles("/", ref files);
+            addfiles("/", ref files, true);
             string msg = "";            
             foreach (string item in files)
             {
@@ -396,7 +438,7 @@ namespace AmpyFileManager
         private void MakeRestoreScript(string output)
         {
             List<string> files = new List<string>();
-            addfiles("/", ref files);
+            addfiles("/", ref files, false);
             string msg = "";
             foreach (string item in files)
             {
@@ -416,9 +458,8 @@ namespace AmpyFileManager
             }
         }
 
-        private void addfiles(string path, ref List<string> files)
+        private void addfiles(string path, ref List<string> files, bool forBackup)
         {
-            CloseComm();
             List<string> items = _ESP.GetDir(path);
             foreach (string item in items)
                 if (!item.StartsWith("<"))
@@ -432,12 +473,35 @@ namespace AmpyFileManager
                 if (item.StartsWith("<"))
                 {
                     string newdir = item.Substring(1, item.Length - 2);
-                    string newpath = path + newdir;
-                    if (newpath.StartsWith("/"))
-                        files.Add("<mkdir " + newpath.Substring(1) + ">");
+                    string newpath = path;
+                    if (newpath.EndsWith("/"))
+                        newpath += newdir;
                     else
-                        files.Add("<mkdir " + newpath + ">");
-                    addfiles(newpath, ref files);
+                        newpath += "/" + newdir;
+
+                    if (forBackup)
+                    {
+                        int dirCount = 0;
+                        if (path != "/")
+                        {
+                            string[] dirs = path.Substring(1).Split('/');
+                            foreach (string dir in dirs)
+                                files.Add("<cd " + dir + ">");
+                            dirCount = dirs.Length;
+                        }
+                        files.Add("<mkdir " + newdir + ">");
+                        if (path != "/")
+                        {
+                            for (int i = 1; i <= dirCount; i++) 
+                                files.Add("<cd ..>");
+                        }
+                    }
+                    else
+                    {
+                        files.Add("<mkdir " + newpath.Substring(1) + ">");
+                    }
+
+                    addfiles(newpath, ref files, forBackup);
                 }
         }
 
@@ -450,7 +514,7 @@ namespace AmpyFileManager
                 if (lastslash == 0)
                     _CurrentPath = "";
                 else
-                    _CurrentPath = _CurrentPath.Substring(0, lastslash - 1);
+                    _CurrentPath = _CurrentPath.Substring(0, lastslash);
                 RefreshFileList();
             }
             else if (selectedItem.Substring(0, 1) == "<") // Go into the directory
@@ -462,21 +526,45 @@ namespace AmpyFileManager
             {
                 _CurrentFile = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
                 string LocalFile = Path.Combine(_SessionPath, selectedItem);
+
                 CloseComm();
+                Cursor.Current = Cursors.WaitCursor;
                 _ESP.GetFile(_CurrentFile, LocalFile);
-                using (StreamReader sr = new StreamReader(LocalFile))
+                Cursor.Current = Cursors.Default;
+                if (File.Exists(LocalFile))
                 {
-                    scintilla1.Text = sr.ReadToEnd().Replace("\r\n", "\n");
-                }                
-                _FileDirty = false;
-                lblCurrentFile.Text = _CurrentFile;                
+                    using (StreamReader sr = new StreamReader(LocalFile))
+                    {
+                        scintilla1.Text = sr.ReadToEnd().Replace("\r\n", "\n");
+                    }
+                    _FileDirty = false;
+                    lblCurrentFile.Text = _CurrentFile;
+                }
             }
         }
 
         private void CloseComm()
         {
             if (serialPort1.IsOpen)
+            {
                 serialPort1.Close();
+                while (serialPort1.IsOpen)
+                    Application.DoEvents();
+                picCommStatus.BackColor = Color.Red;
+            }
+        }
+
+        private void OpenComm()
+        {
+            if (!serialPort1.IsOpen)
+            {
+                serialPort1.PortName = _ESP.COMM_PORT;
+                serialPort1.NewLine = "\r";
+                serialPort1.Open();                
+                while (!serialPort1.IsOpen)
+                    Application.DoEvents();
+                picCommStatus.BackColor = Color.Green;
+            }
         }
 
         private void txtTerminal_Enter(object sender, System.EventArgs e) { }
@@ -486,19 +574,14 @@ namespace AmpyFileManager
         public void DoUpdate(object sender, System.EventArgs e)
         {
             txtTerminal.AppendText(_readBuffer);
+            txtTerminal.ScrollToCaret();
         }
 
         private void SendCommand()
         {
             try
             {
-                if (!serialPort1.IsOpen)
-                {
-                    serialPort1.PortName = _ESP.COMM_PORT;
-                    serialPort1.NewLine = "\r";
-                    serialPort1.Open();
-                }
-
+                OpenComm();
                 if (serialPort1.IsOpen)
                 {
                     serialPort1.WriteLine(txtCommand.Text);
@@ -603,9 +686,9 @@ namespace AmpyFileManager
             // 0 "Keywords",
             // 1 "Highlighted identifiers"
 
-            var python2 = "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield";
+            //var python2 = "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield";
             var python3 = "False None True and as assert break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield";
-            var cython = "cdef cimport cpdef";
+            //var cython = "cdef cimport cpdef";
 
             scintilla.SetKeywords(0, python3);
             // scintilla.SetKeywords(1, "add your own keywords here");

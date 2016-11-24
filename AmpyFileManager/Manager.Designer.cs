@@ -53,11 +53,14 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtTerminal = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.picCommStatus = new System.Windows.Forms.PictureBox();
+            this.btnControlD = new System.Windows.Forms.Button();
+            this.btnControlC = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtCommand = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnControlC = new System.Windows.Forms.Button();
-            this.btnControlD = new System.Windows.Forms.Button();
+            this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -70,11 +73,13 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.btnRefresh);
             this.panel1.Controls.Add(this.btnMkdir);
             this.panel1.Controls.Add(this.btnBackup);
             this.panel1.Controls.Add(this.lblCurrentDirectory);
@@ -87,17 +92,17 @@
             // 
             // btnMkdir
             // 
-            this.btnMkdir.Location = new System.Drawing.Point(328, 5);
+            this.btnMkdir.Location = new System.Drawing.Point(378, 5);
             this.btnMkdir.Name = "btnMkdir";
             this.btnMkdir.Size = new System.Drawing.Size(58, 22);
-            this.btnMkdir.TabIndex = 3;
+            this.btnMkdir.TabIndex = 1;
             this.btnMkdir.Text = "MKDIR";
             this.btnMkdir.UseVisualStyleBackColor = true;
             this.btnMkdir.Click += new System.EventHandler(this.btnMkdir_Click);
             // 
             // btnBackup
             // 
-            this.btnBackup.Location = new System.Drawing.Point(264, 5);
+            this.btnBackup.Location = new System.Drawing.Point(442, 5);
             this.btnBackup.Name = "btnBackup";
             this.btnBackup.Size = new System.Drawing.Size(58, 22);
             this.btnBackup.TabIndex = 2;
@@ -107,13 +112,14 @@
             // 
             // lblCurrentDirectory
             // 
-            this.lblCurrentDirectory.AutoSize = true;
+            this.lblCurrentDirectory.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblCurrentDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentDirectory.Location = new System.Drawing.Point(96, 10);
+            this.lblCurrentDirectory.Location = new System.Drawing.Point(95, 7);
             this.lblCurrentDirectory.Name = "lblCurrentDirectory";
-            this.lblCurrentDirectory.Size = new System.Drawing.Size(41, 13);
+            this.lblCurrentDirectory.Size = new System.Drawing.Size(204, 18);
             this.lblCurrentDirectory.TabIndex = 1;
             this.lblCurrentDirectory.Text = "label2";
+            this.lblCurrentDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label1
             // 
@@ -127,7 +133,6 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.IsSplitterFixed = true;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -248,18 +253,19 @@
             // 
             // lblCurrentFile
             // 
-            this.lblCurrentFile.AutoSize = true;
+            this.lblCurrentFile.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblCurrentFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentFile.Location = new System.Drawing.Point(131, 9);
+            this.lblCurrentFile.Location = new System.Drawing.Point(68, 5);
             this.lblCurrentFile.Name = "lblCurrentFile";
-            this.lblCurrentFile.Size = new System.Drawing.Size(41, 13);
+            this.lblCurrentFile.Size = new System.Drawing.Size(357, 21);
             this.lblCurrentFile.TabIndex = 5;
             this.lblCurrentFile.Text = "label2";
+            this.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(69, 9);
+            this.label2.Location = new System.Drawing.Point(8, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 4;
@@ -267,7 +273,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(8, 4);
+            this.btnSave.Location = new System.Drawing.Point(431, 4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(58, 22);
             this.btnSave.TabIndex = 0;
@@ -318,11 +324,10 @@
             this.txtTerminal.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtTerminal.Size = new System.Drawing.Size(880, 78);
             this.txtTerminal.TabIndex = 0;
-            this.txtTerminal.Enter += new System.EventHandler(this.txtTerminal_Enter);
-            this.txtTerminal.Leave += new System.EventHandler(this.txtTerminal_Leave);
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.picCommStatus);
             this.panel4.Controls.Add(this.btnControlD);
             this.panel4.Controls.Add(this.btnControlC);
             this.panel4.Controls.Add(this.btnSend);
@@ -333,6 +338,36 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(880, 34);
             this.panel4.TabIndex = 1;
+            // 
+            // picCommStatus
+            // 
+            this.picCommStatus.BackColor = System.Drawing.Color.Red;
+            this.picCommStatus.Location = new System.Drawing.Point(830, 8);
+            this.picCommStatus.Name = "picCommStatus";
+            this.picCommStatus.Size = new System.Drawing.Size(16, 17);
+            this.picCommStatus.TabIndex = 5;
+            this.picCommStatus.TabStop = false;
+            this.picCommStatus.Click += new System.EventHandler(this.picCommStatus_Click);
+            // 
+            // btnControlD
+            // 
+            this.btnControlD.Location = new System.Drawing.Point(749, 6);
+            this.btnControlD.Name = "btnControlD";
+            this.btnControlD.Size = new System.Drawing.Size(75, 20);
+            this.btnControlD.TabIndex = 4;
+            this.btnControlD.Text = "Send Ctrl-D";
+            this.btnControlD.UseVisualStyleBackColor = true;
+            this.btnControlD.Click += new System.EventHandler(this.btnControlD_Click);
+            // 
+            // btnControlC
+            // 
+            this.btnControlC.Location = new System.Drawing.Point(668, 6);
+            this.btnControlC.Name = "btnControlC";
+            this.btnControlC.Size = new System.Drawing.Size(75, 20);
+            this.btnControlC.TabIndex = 3;
+            this.btnControlC.Text = "Send Ctrl-C";
+            this.btnControlC.UseVisualStyleBackColor = true;
+            this.btnControlC.Click += new System.EventHandler(this.btnControlC_Click);
             // 
             // btnSend
             // 
@@ -360,25 +395,21 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Command:";
             // 
-            // btnControlC
+            // tmrCommStatus
             // 
-            this.btnControlC.Location = new System.Drawing.Point(668, 6);
-            this.btnControlC.Name = "btnControlC";
-            this.btnControlC.Size = new System.Drawing.Size(75, 20);
-            this.btnControlC.TabIndex = 3;
-            this.btnControlC.Text = "Send Ctrl-C";
-            this.btnControlC.UseVisualStyleBackColor = true;
-            this.btnControlC.Click += new System.EventHandler(this.btnControlC_Click);
+            this.tmrCommStatus.Enabled = true;
+            this.tmrCommStatus.Interval = 1000;
+            this.tmrCommStatus.Tick += new System.EventHandler(this.tmrCommStatus_Tick);
             // 
-            // btnControlD
+            // btnRefresh
             // 
-            this.btnControlD.Location = new System.Drawing.Point(749, 6);
-            this.btnControlD.Name = "btnControlD";
-            this.btnControlD.Size = new System.Drawing.Size(75, 20);
-            this.btnControlD.TabIndex = 4;
-            this.btnControlD.Text = "Send Ctrl-D";
-            this.btnControlD.UseVisualStyleBackColor = true;
-            this.btnControlD.Click += new System.EventHandler(this.btnControlD_Click);
+            this.btnRefresh.Location = new System.Drawing.Point(305, 5);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(67, 22);
+            this.btnRefresh.TabIndex = 0;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // Manager
             // 
@@ -389,7 +420,7 @@
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Manager";
-            this.Text = "Ampy ESP8266 File Manager";
+            this.Text = "Ampy File Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Manager_FormClosing);
             this.Load += new System.EventHandler(this.Manager_Load);
             this.panel1.ResumeLayout(false);
@@ -408,6 +439,7 @@
             this.splitContainer2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -442,5 +474,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnControlD;
         private System.Windows.Forms.Button btnControlC;
+        private System.Windows.Forms.PictureBox picCommStatus;
+        private System.Windows.Forms.Timer tmrCommStatus;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

@@ -38,9 +38,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(34, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Com Ports";
+            this.label1.Text = "Comm Ports";
             // 
             // cboPorts
             // 
@@ -73,7 +73,7 @@
             this.MinimizeBox = false;
             this.Name = "SelectCom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Comm Port";
+            this.Text = "Select Comm Port";
             this.Load += new System.EventHandler(this.SelectCom_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
