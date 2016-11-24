@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -41,6 +42,7 @@ namespace AmpyFileManager
             _SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("yyyyMMdd-hhmm"));
             Directory.CreateDirectory(_SessionPath);
 
+            // handle the <enter> key when in the txtCommand
             txtCommand.KeyPress += (sndr, ev) =>
             {
                 if (ev.KeyChar.Equals((char)13))
@@ -49,6 +51,14 @@ namespace AmpyFileManager
                     ev.Handled = true;
                 }
             };
+
+            string BaudRate = ConfigurationManager.AppSettings["BaudRate"];
+            if (!String.IsNullOrEmpty(BaudRate))
+            {
+                serialPort1.BaudRate = Convert.ToInt32(BaudRate);
+            }
+
+            btnRun.Visible = (ConfigurationManager.AppSettings["ShowRunButton"].ToUpper().Substring(0, 1) == "Y");
 
             ConfigureForPython(scintilla1);
 
@@ -236,7 +246,7 @@ namespace AmpyFileManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "btnControlC_Click() Error");
+                MessageBox.Show(ex.Message, "btnControlD_Click() Error");
             }
         }
 
@@ -567,10 +577,6 @@ namespace AmpyFileManager
             }
         }
 
-        private void txtTerminal_Enter(object sender, System.EventArgs e) { }
-
-        private void txtTerminal_Leave(object sender, System.EventArgs e) { }
-
         public void DoUpdate(object sender, System.EventArgs e)
         {
             txtTerminal.AppendText(_readBuffer);
@@ -602,8 +608,16 @@ namespace AmpyFileManager
         {
             // Reset the styles
             scintilla.StyleResetDefault();
-            scintilla.Styles[Style.Default].Font = "Consolas";
-            scintilla.Styles[Style.Default].Size = 10;
+            string EditorFont = ConfigurationManager.AppSettings["EditorFont"];
+            if (!String.IsNullOrEmpty(EditorFont))
+                scintilla.Styles[Style.Default].Font = EditorFont;
+            else
+                scintilla.Styles[Style.Default].Font = "Consolas";
+            string EditorFontSize = ConfigurationManager.AppSettings["EditorFontSize"];
+            if (!String.IsNullOrEmpty(EditorFontSize))
+                scintilla.Styles[Style.Default].Size = Convert.ToInt32(EditorFontSize);
+            else
+                scintilla.Styles[Style.Default].Size = 10;
             scintilla.StyleClearAll(); // i.e. Apply to all
 
             // Set the lexer

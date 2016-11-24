@@ -19,7 +19,7 @@ namespace AmpyFileManager
         {
             string[] ports = SerialPort.GetPortNames();
 
-            COMM_PORT = ConfigurationManager.AppSettings["COMM_PORT"];
+            COMM_PORT = ConfigurationManager.AppSettings["CommPort"];
             if (!String.IsNullOrEmpty(COMM_PORT))
             {
                 bool found = false;
@@ -47,7 +47,7 @@ namespace AmpyFileManager
                     COMM_PORT = ((ComboBox)s.Controls["cboPorts"]).Text;
                     s.Dispose();
                 }
-                ConfigurationManager.AppSettings["COMM_PORT"] = COMM_PORT;
+                ConfigurationManager.AppSettings["CommPort"] = COMM_PORT;
             }
 
         }
