@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Manager));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.btnMkdir = new System.Windows.Forms.Button();
             this.btnBackup = new System.Windows.Forms.Button();
             this.lblCurrentDirectory = new System.Windows.Forms.Label();
@@ -57,10 +58,9 @@
             this.btnControlD = new System.Windows.Forms.Button();
             this.btnControlC = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
-            this.txtCommand = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
-            this.btnRefresh = new System.Windows.Forms.Button();
+            this.cboCommand = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -89,6 +89,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(880, 34);
             this.panel1.TabIndex = 0;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(305, 5);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(67, 22);
+            this.btnRefresh.TabIndex = 0;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnMkdir
             // 
@@ -327,11 +337,11 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.cboCommand);
             this.panel4.Controls.Add(this.picCommStatus);
             this.panel4.Controls.Add(this.btnControlD);
             this.panel4.Controls.Add(this.btnControlC);
             this.panel4.Controls.Add(this.btnSend);
-            this.panel4.Controls.Add(this.txtCommand);
             this.panel4.Controls.Add(this.label3);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(0, 78);
@@ -379,13 +389,6 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
-            // txtCommand
-            // 
-            this.txtCommand.Location = new System.Drawing.Point(69, 7);
-            this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(511, 20);
-            this.txtCommand.TabIndex = 1;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -401,15 +404,14 @@
             this.tmrCommStatus.Interval = 1000;
             this.tmrCommStatus.Tick += new System.EventHandler(this.tmrCommStatus_Tick);
             // 
-            // btnRefresh
+            // cboCommand
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(305, 5);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(67, 22);
-            this.btnRefresh.TabIndex = 0;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            this.cboCommand.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboCommand.FormattingEnabled = true;
+            this.cboCommand.Location = new System.Drawing.Point(62, 5);
+            this.cboCommand.Name = "cboCommand";
+            this.cboCommand.Size = new System.Drawing.Size(512, 24);
+            this.cboCommand.TabIndex = 6;
             // 
             // Manager
             // 
@@ -422,6 +424,7 @@
             this.Name = "Manager";
             this.Text = "Ampy File Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Manager_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Manager_FormClosed);
             this.Load += new System.EventHandler(this.Manager_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -470,12 +473,12 @@
         private System.Windows.Forms.TextBox txtTerminal;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.TextBox txtCommand;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnControlD;
         private System.Windows.Forms.Button btnControlC;
         private System.Windows.Forms.PictureBox picCommStatus;
         private System.Windows.Forms.Timer tmrCommStatus;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.ComboBox cboCommand;
     }
 }

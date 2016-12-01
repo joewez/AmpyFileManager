@@ -21,6 +21,7 @@ namespace AmpyFileManager
         private string _CurrentFile = "";
         private bool _FileDirty = false;
         private string _readBuffer = string.Empty;
+        private string _CommandHistory = "";
 
         private ESPRoutines _ESP;
 
@@ -42,8 +43,11 @@ namespace AmpyFileManager
             _SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("yyyyMMdd-hhmm"));
             Directory.CreateDirectory(_SessionPath);
 
-            // handle the <enter> key when in the txtCommand
-            txtCommand.KeyPress += (sndr, ev) =>
+            // load previous commands
+            LoadCommands();
+
+            // handle the <enter> key when in the cboCommand
+            cboCommand.KeyPress += (sndr, ev) =>
             {
                 if (ev.KeyChar.Equals((char)13))
                 {
@@ -271,9 +275,45 @@ namespace AmpyFileManager
                 picCommStatus.BackColor = Color.Red;
         }
 
+        private void Manager_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveCommands();
+        }
+
         #endregion
 
         #region Private Helper Routines
+
+        private void LoadCommands()
+        {
+            string cmdfile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "history.txt");
+            if (File.Exists(cmdfile))
+            {
+                using (StreamReader sr = new StreamReader(cmdfile))
+                {
+                    string line = sr.ReadLine();
+                    while (!String.IsNullOrEmpty(line))
+                    {
+                        cboCommand.Items.Add(line);
+                        line = sr.ReadLine();
+                    }
+                }
+            }
+        }
+
+        private void SaveCommands()
+        {
+            string cmdfile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "history.txt");
+            using (StreamWriter sw = new StreamWriter(cmdfile))
+            {
+                foreach (var item in cboCommand.Items)
+                {
+                    string newcmd = item.ToString();
+                    if (!String.IsNullOrEmpty(newcmd))
+                        sw.WriteLine(newcmd);
+                }
+            }                    
+        }
 
         private bool OKToContinue()
         {
@@ -590,8 +630,10 @@ namespace AmpyFileManager
                 OpenComm();
                 if (serialPort1.IsOpen)
                 {
-                    serialPort1.WriteLine(txtCommand.Text);
-                    txtCommand.Text = "";
+                    string command = cboCommand.Text;
+                    serialPort1.WriteLine(command);
+                    TestNewCommand(command);
+                    cboCommand.Text = "";
                 }
             }
             catch (IOException iex)
@@ -602,6 +644,21 @@ namespace AmpyFileManager
             {
                 MessageBox.Show(ex.Message, "SendCommand() Error");
             }
+        }
+
+        private void TestNewCommand(string command)
+        {
+            bool found = false;
+            foreach (var item in cboCommand.Items)
+            {
+                if (item.ToString() == command)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                cboCommand.Items.Insert(0, command);
         }
 
         private void ConfigureForPython(Scintilla scintilla)
