@@ -15,13 +15,12 @@ namespace AmpyFileManager
         private const string NEW_FILENAME = "<new>";
         private const string LF = "\n";
         private const string CRLF = "\r\n";
-        private string _BackupPath = "";
-        private string _SessionPath = "";
-        private string _CurrentPath = "";
-        private string _CurrentFile = "";
+        private string _BackupPath = string.Empty;
+        private string _SessionPath = string.Empty;
+        private string _CurrentPath = string.Empty;
+        private string _CurrentFile = string.Empty;
         private bool _FileDirty = false;
         private string _readBuffer = string.Empty;
-        private string _CommandHistory = "";
 
         private ESPRoutines _ESP;
 
@@ -648,17 +647,20 @@ namespace AmpyFileManager
 
         private void TestNewCommand(string command)
         {
-            bool found = false;
-            foreach (var item in cboCommand.Items)
+            if (!String.IsNullOrEmpty(command))
             {
-                if (item.ToString() == command)
+                bool found = false;
+                foreach (var item in cboCommand.Items)
                 {
-                    found = true;
-                    break;
+                    if (item.ToString() == command)
+                    {
+                        found = true;
+                        break;
+                    }
                 }
+                if (!found)
+                    cboCommand.Items.Insert(0, command);
             }
-            if (!found)
-                cboCommand.Items.Insert(0, command);
         }
 
         private void ConfigureForPython(Scintilla scintilla)
