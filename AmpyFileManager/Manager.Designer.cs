@@ -31,114 +31,223 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Manager));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnMkdir = new System.Windows.Forms.Button();
+            this.btnRun = new System.Windows.Forms.Button();
             this.btnBackup = new System.Windows.Forms.Button();
-            this.lblCurrentDirectory = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.btnChangeMode = new System.Windows.Forms.Button();
+            this.btnMkdir = new System.Windows.Forms.Button();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.btnOpen = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.picCommStatus = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lstDirectory = new System.Windows.Forms.ListBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.btnRun = new System.Windows.Forms.Button();
-            this.btnNew = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnOpen = new System.Windows.Forms.Button();
+            this.lblCurrentDirectory = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
             this.scintilla1 = new ScintillaNET.Scintilla();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblCurrentFile = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtTerminal = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.picCommStatus = new System.Windows.Forms.PictureBox();
+            this.cboCommand = new System.Windows.Forms.ComboBox();
             this.btnControlD = new System.Windows.Forms.Button();
             this.btnControlC = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
-            this.cboCommand = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
+            this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel10.SuspendLayout();
+            this.panel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.btnRefresh);
-            this.panel1.Controls.Add(this.btnMkdir);
+            this.panel1.Controls.Add(this.btnRun);
             this.panel1.Controls.Add(this.btnBackup);
-            this.panel1.Controls.Add(this.lblCurrentDirectory);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.btnRefresh);
+            this.panel1.Controls.Add(this.panel5);
+            this.panel1.Controls.Add(this.btnMkdir);
+            this.panel1.Controls.Add(this.btnLoad);
+            this.panel1.Controls.Add(this.btnNew);
+            this.panel1.Controls.Add(this.btnDelete);
+            this.panel1.Controls.Add(this.btnOpen);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(880, 34);
+            this.panel1.Size = new System.Drawing.Size(956, 45);
             this.panel1.TabIndex = 0;
             // 
-            // btnRefresh
+            // btnRun
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(305, 5);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(67, 22);
-            this.btnRefresh.TabIndex = 0;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // btnMkdir
-            // 
-            this.btnMkdir.Location = new System.Drawing.Point(378, 5);
-            this.btnMkdir.Name = "btnMkdir";
-            this.btnMkdir.Size = new System.Drawing.Size(58, 22);
-            this.btnMkdir.TabIndex = 1;
-            this.btnMkdir.Text = "MKDIR";
-            this.btnMkdir.UseVisualStyleBackColor = true;
-            this.btnMkdir.Click += new System.EventHandler(this.btnMkdir_Click);
+            this.btnRun.Location = new System.Drawing.Point(601, 11);
+            this.btnRun.Name = "btnRun";
+            this.btnRun.Size = new System.Drawing.Size(40, 23);
+            this.btnRun.TabIndex = 4;
+            this.btnRun.Text = "Run";
+            this.btnRun.UseVisualStyleBackColor = true;
+            this.btnRun.Visible = false;
+            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
             // btnBackup
             // 
-            this.btnBackup.Location = new System.Drawing.Point(442, 5);
+            this.btnBackup.Image = ((System.Drawing.Image)(resources.GetObject("btnBackup.Image")));
+            this.btnBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnBackup.Location = new System.Drawing.Point(432, 7);
             this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(58, 22);
-            this.btnBackup.TabIndex = 2;
-            this.btnBackup.Text = "Backup";
+            this.btnBackup.Size = new System.Drawing.Size(105, 30);
+            this.btnBackup.TabIndex = 6;
+            this.btnBackup.Text = "Backup Device";
+            this.btnBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnBackup.UseVisualStyleBackColor = true;
             this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
             // 
-            // lblCurrentDirectory
+            // btnRefresh
             // 
-            this.lblCurrentDirectory.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblCurrentDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentDirectory.Location = new System.Drawing.Point(95, 7);
-            this.lblCurrentDirectory.Name = "lblCurrentDirectory";
-            this.lblCurrentDirectory.Size = new System.Drawing.Size(204, 18);
-            this.lblCurrentDirectory.TabIndex = 1;
-            this.lblCurrentDirectory.Text = "label2";
-            this.lblCurrentDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Location = new System.Drawing.Point(359, 7);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(67, 30);
+            this.btnRefresh.TabIndex = 5;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.btnChangeMode);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel5.Location = new System.Drawing.Point(818, 0);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(134, 41);
+            this.panel5.TabIndex = 7;
+            // 
+            // btnChangeMode
+            // 
+            this.btnChangeMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChangeMode.ForeColor = System.Drawing.Color.Red;
+            this.btnChangeMode.Image = ((System.Drawing.Image)(resources.GetObject("btnChangeMode.Image")));
+            this.btnChangeMode.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnChangeMode.Location = new System.Drawing.Point(9, 6);
+            this.btnChangeMode.Name = "btnChangeMode";
+            this.btnChangeMode.Size = new System.Drawing.Size(116, 31);
+            this.btnChangeMode.TabIndex = 7;
+            this.btnChangeMode.Text = "Console Mode";
+            this.btnChangeMode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnChangeMode.UseVisualStyleBackColor = true;
+            this.btnChangeMode.Click += new System.EventHandler(this.btnChangeMode_Click);
+            // 
+            // btnMkdir
+            // 
+            this.btnMkdir.Image = ((System.Drawing.Image)(resources.GetObject("btnMkdir.Image")));
+            this.btnMkdir.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMkdir.Location = new System.Drawing.Point(285, 7);
+            this.btnMkdir.Name = "btnMkdir";
+            this.btnMkdir.Size = new System.Drawing.Size(68, 30);
+            this.btnMkdir.TabIndex = 4;
+            this.btnMkdir.Text = "MKDIR";
+            this.btnMkdir.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnMkdir.UseVisualStyleBackColor = true;
+            this.btnMkdir.Click += new System.EventHandler(this.btnMkdir_Click);
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnLoad.Image")));
+            this.btnLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLoad.Location = new System.Drawing.Point(144, 7);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(61, 30);
+            this.btnLoad.TabIndex = 2;
+            this.btnLoad.Text = "Load";
+            this.btnLoad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // btnNew
+            // 
+            this.btnNew.Image = ((System.Drawing.Image)(resources.GetObject("btnNew.Image")));
+            this.btnNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNew.Location = new System.Drawing.Point(80, 7);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(58, 30);
+            this.btnNew.TabIndex = 1;
+            this.btnNew.Text = "New";
+            this.btnNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
+            this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDelete.Location = new System.Drawing.Point(211, 7);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(68, 30);
+            this.btnDelete.TabIndex = 3;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.Image = ((System.Drawing.Image)(resources.GetObject("btnOpen.Image")));
+            this.btnOpen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnOpen.Location = new System.Drawing.Point(10, 7);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(64, 30);
+            this.btnOpen.TabIndex = 0;
+            this.btnOpen.Text = "Open";
+            this.btnOpen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Location = new System.Drawing.Point(3, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Current Directory:";
+            this.label1.Text = "Current Path:";
+            // 
+            // picCommStatus
+            // 
+            this.picCommStatus.BackColor = System.Drawing.Color.Red;
+            this.picCommStatus.Location = new System.Drawing.Point(830, 5);
+            this.picCommStatus.Name = "picCommStatus";
+            this.picCommStatus.Size = new System.Drawing.Size(23, 23);
+            this.picCommStatus.TabIndex = 5;
+            this.picCommStatus.TabStop = false;
+            this.picCommStatus.Click += new System.EventHandler(this.picCommStatus_Click);
             // 
             // splitContainer1
             // 
@@ -155,87 +264,53 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.scintilla1);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
-            this.splitContainer1.Size = new System.Drawing.Size(880, 367);
-            this.splitContainer1.SplitterDistance = 273;
+            this.splitContainer1.Size = new System.Drawing.Size(956, 398);
+            this.splitContainer1.SplitterDistance = 399;
             this.splitContainer1.TabIndex = 1;
             // 
             // lstDirectory
             // 
-            this.lstDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.lstDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.lstDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstDirectory.FormattingEnabled = true;
             this.lstDirectory.ItemHeight = 20;
-            this.lstDirectory.Location = new System.Drawing.Point(0, 0);
+            this.lstDirectory.Location = new System.Drawing.Point(0, 33);
             this.lstDirectory.Name = "lstDirectory";
-            this.lstDirectory.Size = new System.Drawing.Size(273, 334);
-            this.lstDirectory.TabIndex = 1;
+            this.lstDirectory.Size = new System.Drawing.Size(399, 365);
+            this.lstDirectory.TabIndex = 8;
             this.lstDirectory.DoubleClick += new System.EventHandler(this.lstDirectory_DoubleClick);
             // 
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel3.Controls.Add(this.btnRun);
-            this.panel3.Controls.Add(this.btnNew);
-            this.panel3.Controls.Add(this.btnLoad);
-            this.panel3.Controls.Add(this.btnDelete);
-            this.panel3.Controls.Add(this.btnOpen);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 334);
+            this.panel3.Controls.Add(this.lblCurrentDirectory);
+            this.panel3.Controls.Add(this.panel6);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(273, 33);
+            this.panel3.Size = new System.Drawing.Size(399, 33);
             this.panel3.TabIndex = 0;
             // 
-            // btnRun
+            // lblCurrentDirectory
             // 
-            this.btnRun.Location = new System.Drawing.Point(211, 3);
-            this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(40, 23);
-            this.btnRun.TabIndex = 4;
-            this.btnRun.Text = "Run";
-            this.btnRun.UseVisualStyleBackColor = true;
-            this.btnRun.Visible = false;
-            this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
+            this.lblCurrentDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCurrentDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentDirectory.Location = new System.Drawing.Point(74, 0);
+            this.lblCurrentDirectory.Name = "lblCurrentDirectory";
+            this.lblCurrentDirectory.Size = new System.Drawing.Size(321, 29);
+            this.lblCurrentDirectory.TabIndex = 3;
+            this.lblCurrentDirectory.Text = "label2";
+            this.lblCurrentDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnNew
+            // panel6
             // 
-            this.btnNew.Location = new System.Drawing.Point(57, 3);
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(41, 23);
-            this.btnNew.TabIndex = 3;
-            this.btnNew.Text = "New";
-            this.btnNew.UseVisualStyleBackColor = true;
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(162, 3);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(43, 23);
-            this.btnLoad.TabIndex = 2;
-            this.btnLoad.Text = "Load";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Location = new System.Drawing.Point(104, 3);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(52, 23);
-            this.btnDelete.TabIndex = 1;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // btnOpen
-            // 
-            this.btnOpen.Location = new System.Drawing.Point(3, 3);
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(48, 23);
-            this.btnOpen.TabIndex = 0;
-            this.btnOpen.Text = "Open";
-            this.btnOpen.UseVisualStyleBackColor = true;
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            this.panel6.Controls.Add(this.label1);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel6.Location = new System.Drawing.Point(0, 0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(74, 29);
+            this.panel6.TabIndex = 2;
             // 
             // scintilla1
             // 
@@ -243,58 +318,86 @@
             this.scintilla1.EolMode = ScintillaNET.Eol.Lf;
             this.scintilla1.IndentationGuides = ScintillaNET.IndentView.Real;
             this.scintilla1.Lexer = ScintillaNET.Lexer.Python;
-            this.scintilla1.Location = new System.Drawing.Point(0, 0);
+            this.scintilla1.Location = new System.Drawing.Point(0, 33);
             this.scintilla1.Name = "scintilla1";
-            this.scintilla1.Size = new System.Drawing.Size(603, 334);
-            this.scintilla1.TabIndex = 1;
+            this.scintilla1.Size = new System.Drawing.Size(553, 365);
+            this.scintilla1.TabIndex = 11;
             this.scintilla1.TextChanged += new System.EventHandler(this.scintilla1_TextChanged);
             // 
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.lblCurrentFile);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.btnSave);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 334);
+            this.panel2.Controls.Add(this.panel10);
+            this.panel2.Controls.Add(this.panel9);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(603, 33);
+            this.panel2.Size = new System.Drawing.Size(553, 33);
             this.panel2.TabIndex = 0;
             // 
             // lblCurrentFile
             // 
-            this.lblCurrentFile.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblCurrentFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCurrentFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentFile.Location = new System.Drawing.Point(68, 5);
+            this.lblCurrentFile.Location = new System.Drawing.Point(77, 0);
             this.lblCurrentFile.Name = "lblCurrentFile";
-            this.lblCurrentFile.Size = new System.Drawing.Size(357, 21);
-            this.lblCurrentFile.TabIndex = 5;
+            this.lblCurrentFile.Size = new System.Drawing.Size(309, 29);
+            this.lblCurrentFile.TabIndex = 8;
             this.lblCurrentFile.Text = "label2";
             this.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // panel10
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Current File:";
+            this.panel10.Controls.Add(this.btnSaveAs);
+            this.panel10.Controls.Add(this.btnSave);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel10.Location = new System.Drawing.Point(386, 0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(163, 29);
+            this.panel10.TabIndex = 7;
+            // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.Location = new System.Drawing.Point(12, 3);
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(75, 22);
+            this.btnSaveAs.TabIndex = 9;
+            this.btnSaveAs.Text = "Save As...";
+            this.btnSaveAs.UseVisualStyleBackColor = true;
+            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(431, 4);
+            this.btnSave.Location = new System.Drawing.Point(93, 3);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(58, 22);
-            this.btnSave.TabIndex = 0;
+            this.btnSave.TabIndex = 10;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.label2);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(77, 29);
+            this.panel9.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Current File:";
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "py";
-            this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "All Files (*.*)|*.*|Python Files (*.py)|*.*";
             // 
             // serialPort1
@@ -305,7 +408,7 @@
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 34);
+            this.splitContainer2.Location = new System.Drawing.Point(0, 45);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -317,8 +420,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtTerminal);
             this.splitContainer2.Panel2.Controls.Add(this.panel4);
-            this.splitContainer2.Size = new System.Drawing.Size(880, 483);
-            this.splitContainer2.SplitterDistance = 367;
+            this.splitContainer2.Size = new System.Drawing.Size(956, 527);
+            this.splitContainer2.SplitterDistance = 398;
             this.splitContainer2.TabIndex = 2;
             // 
             // txtTerminal
@@ -332,7 +435,7 @@
             this.txtTerminal.Name = "txtTerminal";
             this.txtTerminal.ReadOnly = true;
             this.txtTerminal.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtTerminal.Size = new System.Drawing.Size(880, 78);
+            this.txtTerminal.Size = new System.Drawing.Size(956, 91);
             this.txtTerminal.TabIndex = 0;
             // 
             // panel4
@@ -344,27 +447,26 @@
             this.panel4.Controls.Add(this.btnSend);
             this.panel4.Controls.Add(this.label3);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 78);
+            this.panel4.Location = new System.Drawing.Point(0, 91);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(880, 34);
+            this.panel4.Size = new System.Drawing.Size(956, 34);
             this.panel4.TabIndex = 1;
             // 
-            // picCommStatus
+            // cboCommand
             // 
-            this.picCommStatus.BackColor = System.Drawing.Color.Red;
-            this.picCommStatus.Location = new System.Drawing.Point(830, 8);
-            this.picCommStatus.Name = "picCommStatus";
-            this.picCommStatus.Size = new System.Drawing.Size(16, 17);
-            this.picCommStatus.TabIndex = 5;
-            this.picCommStatus.TabStop = false;
-            this.picCommStatus.Click += new System.EventHandler(this.picCommStatus_Click);
+            this.cboCommand.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboCommand.FormattingEnabled = true;
+            this.cboCommand.Location = new System.Drawing.Point(62, 5);
+            this.cboCommand.Name = "cboCommand";
+            this.cboCommand.Size = new System.Drawing.Size(512, 24);
+            this.cboCommand.TabIndex = 12;
             // 
             // btnControlD
             // 
             this.btnControlD.Location = new System.Drawing.Point(749, 6);
             this.btnControlD.Name = "btnControlD";
-            this.btnControlD.Size = new System.Drawing.Size(75, 20);
-            this.btnControlD.TabIndex = 4;
+            this.btnControlD.Size = new System.Drawing.Size(75, 22);
+            this.btnControlD.TabIndex = 15;
             this.btnControlD.Text = "Send Ctrl-D";
             this.btnControlD.UseVisualStyleBackColor = true;
             this.btnControlD.Click += new System.EventHandler(this.btnControlD_Click);
@@ -373,8 +475,8 @@
             // 
             this.btnControlC.Location = new System.Drawing.Point(668, 6);
             this.btnControlC.Name = "btnControlC";
-            this.btnControlC.Size = new System.Drawing.Size(75, 20);
-            this.btnControlC.TabIndex = 3;
+            this.btnControlC.Size = new System.Drawing.Size(75, 22);
+            this.btnControlC.TabIndex = 14;
             this.btnControlC.Text = "Send Ctrl-C";
             this.btnControlC.UseVisualStyleBackColor = true;
             this.btnControlC.Click += new System.EventHandler(this.btnControlC_Click);
@@ -383,8 +485,8 @@
             // 
             this.btnSend.Location = new System.Drawing.Point(587, 7);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 20);
-            this.btnSend.TabIndex = 2;
+            this.btnSend.Size = new System.Drawing.Size(75, 21);
+            this.btnSend.TabIndex = 13;
             this.btnSend.Text = "Send";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
@@ -404,20 +506,11 @@
             this.tmrCommStatus.Interval = 1000;
             this.tmrCommStatus.Tick += new System.EventHandler(this.tmrCommStatus_Tick);
             // 
-            // cboCommand
-            // 
-            this.cboCommand.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboCommand.FormattingEnabled = true;
-            this.cboCommand.Location = new System.Drawing.Point(62, 5);
-            this.cboCommand.Name = "cboCommand";
-            this.cboCommand.Size = new System.Drawing.Size(512, 24);
-            this.cboCommand.TabIndex = 6;
-            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(880, 517);
+            this.ClientSize = new System.Drawing.Size(956, 572);
             this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -427,14 +520,19 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Manager_FormClosed);
             this.Load += new System.EventHandler(this.Manager_Load);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.panel10.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
@@ -442,7 +540,6 @@
             this.splitContainer2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -455,16 +552,12 @@
         private System.Windows.Forms.Panel panel3;
         private ScintillaNET.Scintilla scintilla1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label lblCurrentDirectory;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnRun;
-        private System.Windows.Forms.Label lblCurrentFile;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnBackup;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button btnMkdir;
@@ -480,5 +573,15 @@
         private System.Windows.Forms.Timer tmrCommStatus;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.ComboBox cboCommand;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Button btnChangeMode;
+        private System.Windows.Forms.Label lblCurrentDirectory;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label lblCurrentFile;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.Button btnSaveAs;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Label label2;
     }
 }

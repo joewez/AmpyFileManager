@@ -14,6 +14,7 @@ namespace AmpyFileManager
     {
         private const string NEW_FILENAME = "<new>";
         private const string LF = "\n";
+        private const string CR = "\r";
         private const string CRLF = "\r\n";
         private string _BackupPath = string.Empty;
         private string _SessionPath = string.Empty;
@@ -39,7 +40,8 @@ namespace AmpyFileManager
             if (!Directory.Exists(_BackupPath))
                 Directory.CreateDirectory(_BackupPath);
 
-            _SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("yyyyMMdd-hhmm"));
+            //_SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("yyyyMMdd-HHmm"));
+            _SessionPath = Path.Combine(_BackupPath, "session");
             Directory.CreateDirectory(_SessionPath);
 
             // load previous commands
@@ -84,10 +86,27 @@ namespace AmpyFileManager
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            bool doRefresh = (_CurrentFile == NEW_FILENAME);
-            bool saved = DoSave();
-            if (saved && doRefresh)
-                RefreshFileList();
+            ButtonSave();
+        }
+
+        private void btnSaveAs_Click(object sender, EventArgs e)
+        {
+            if (_CurrentFile == NEW_FILENAME)
+                ButtonSave();
+            else
+            {
+                string oldFilename = _CurrentFile;
+                _CurrentFile = NEW_FILENAME;
+                bool saved = DoSave();
+                if (saved)
+                {
+                    lblCurrentFile.Text = GetFileOnly(_CurrentFile);
+                    _FileDirty = false;
+                    RefreshFileList();
+                }
+                else
+                    _CurrentFile = oldFilename;
+            }
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -133,12 +152,17 @@ namespace AmpyFileManager
             string newdir = Microsoft.VisualBasic.Interaction.InputBox("New directory under " + lblCurrentDirectory.Text + ":", "Create Directory", "");
             if (newdir != "")
             {
-                string newdirfull = (_CurrentPath == "") ? newdir : _CurrentPath + "/" + newdir;
-                CloseComm();
-                Cursor.Current = Cursors.WaitCursor;
-                _ESP.CreateDir(newdirfull);
-                Cursor.Current = Cursors.Default;
-                RefreshFileList();
+                if (!newdir.Contains("."))
+                {
+                    string newdirfull = (_CurrentPath == "") ? newdir : _CurrentPath + "/" + newdir;
+                    CloseComm();
+                    Cursor.Current = Cursors.WaitCursor;
+                    _ESP.CreateDir(newdirfull);
+                    Cursor.Current = Cursors.Default;
+                    RefreshFileList();
+                }
+                else
+                    MessageBox.Show("Cannot create new directory with a period in the name.");
             }
         }
 
@@ -180,7 +204,7 @@ namespace AmpyFileManager
             {
                 if (serialPort1.IsOpen)
                 {
-                    _readBuffer = serialPort1.ReadLine().Replace("\r", "\r\n") + "\r\n";
+                    _readBuffer = serialPort1.ReadLine().Replace(CR, CRLF) + CRLF;
                     this.Invoke(new EventHandler(DoUpdate));
                 }
             }
@@ -206,7 +230,7 @@ namespace AmpyFileManager
                 if (!serialPort1.IsOpen)
                 {
                     serialPort1.PortName = _ESP.COMM_PORT;
-                    serialPort1.NewLine = "\r";
+                    serialPort1.NewLine = CR;
                     serialPort1.Open();
                 }
 
@@ -233,7 +257,7 @@ namespace AmpyFileManager
                 if (!serialPort1.IsOpen)
                 {
                     serialPort1.PortName = _ESP.COMM_PORT;
-                    serialPort1.NewLine = "\r";
+                    serialPort1.NewLine = CR;
                     serialPort1.Open();
                 }
 
@@ -256,7 +280,7 @@ namespace AmpyFileManager
         private void picCommStatus_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
-                CloseComm();
+                RefreshFileList();
             else
                 OpenComm();
         }
@@ -272,6 +296,18 @@ namespace AmpyFileManager
                 picCommStatus.BackColor = Color.Green;
             else
                 picCommStatus.BackColor = Color.Red;
+            if (_FileDirty && lblCurrentFile.ForeColor != Color.Red)
+                lblCurrentFile.ForeColor = Color.Red;
+            else if (!_FileDirty && lblCurrentFile.ForeColor == Color.Red)
+                lblCurrentFile.ForeColor = Color.Black;
+        }
+
+        private void btnChangeMode_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+                RefreshFileList();
+            else
+                OpenComm();
         }
 
         private void Manager_FormClosed(object sender, FormClosedEventArgs e)
@@ -282,6 +318,18 @@ namespace AmpyFileManager
         #endregion
 
         #region Private Helper Routines
+
+        private void ButtonSave()
+        {
+            bool doRefresh = (_CurrentFile == NEW_FILENAME);
+            bool saved = DoSave();
+            if (saved)
+            {
+                _FileDirty = false;
+                if (doRefresh)
+                    RefreshFileList();
+            }
+        }
 
         private void LoadCommands()
         {
@@ -339,8 +387,13 @@ namespace AmpyFileManager
                 string filename = Microsoft.VisualBasic.Interaction.InputBox("New Filename:", "Save File", "");
                 if (filename != "")
                 {
-                    _CurrentFile = _CurrentPath + "/" + filename;                    
-                    result = SaveItem();
+                    if (filename.IndexOf(".") > 0)
+                    {
+                        _CurrentFile = _CurrentPath + "/" + filename;
+                        result = SaveItem();
+                    }
+                    else
+                        MessageBox.Show("Filename must have an extension.");
                 }
             }
             else
@@ -359,6 +412,49 @@ namespace AmpyFileManager
             lblCurrentFile.Text = _CurrentFile;
         }
 
+        private void OpenItem()
+        {
+            string selectedItem = lstDirectory.Text;
+            if (selectedItem == "")
+            {
+
+            }
+            else if (selectedItem == "<..>") // Go up one directory
+            {
+                int lastslash = _CurrentPath.LastIndexOf("/");
+                if (lastslash == 0)
+                    _CurrentPath = "";
+                else
+                    _CurrentPath = _CurrentPath.Substring(0, lastslash);
+                RefreshFileList();
+            }
+            else if (selectedItem.Substring(0, 1) == "<") // Go into the directory
+            {
+                _CurrentPath = _CurrentPath + "/" + selectedItem.Replace("<", "").Replace(">", "");
+                RefreshFileList();
+            }
+            else // Otherwise open the file
+            {
+                _CurrentFile = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
+                string LocalFile = Path.Combine(_SessionPath, selectedItem);
+
+                CloseComm();
+                Cursor.Current = Cursors.WaitCursor;
+                _ESP.GetFile(_CurrentFile, LocalFile);
+                Cursor.Current = Cursors.Default;
+                if (File.Exists(LocalFile))
+                {
+                    using (StreamReader sr = new StreamReader(LocalFile))
+                    {
+                        string contents = sr.ReadToEnd();
+                        scintilla1.Text = contents.Replace(CRLF, LF);
+                    }
+                    _FileDirty = false;
+                    lblCurrentFile.Text = GetFileOnly(_CurrentFile);
+                }
+            }
+        }
+
         private bool SaveItem()
         {
             bool result = false;
@@ -366,15 +462,17 @@ namespace AmpyFileManager
             try
             {
                 string CurrentFilename = _CurrentFile.Substring(_CurrentFile.LastIndexOf('/') + 1);
+
                 string SaveFile = Path.Combine(_SessionPath, CurrentFilename);
                 if (File.Exists(SaveFile))
                     File.Delete(SaveFile);
 
-                using (TextWriter tw = new StreamWriter(SaveFile))
-                {
-                    tw.NewLine = LF;
-                    tw.Write(scintilla1.Text.Replace(CRLF, LF));
-                }
+                string text = scintilla1.Text;
+                if (text.Contains("\n"))
+                    text = text.Replace("\r", "");
+                else
+                    text = text.Replace("\r", "\n");
+                File.WriteAllText(SaveFile, text);
 
                 CloseComm();
 
@@ -408,17 +506,23 @@ namespace AmpyFileManager
             CloseComm();
             Cursor.Current = Cursors.WaitCursor;
             List<string> dir = _ESP.GetDir(_CurrentPath);
-            Cursor.Current = Cursors.Default;
+            if (dir.Count == 1 && dir[0].Length > 15)
+            {
+                dir = _ESP.GetDir(_CurrentPath);
+                Cursor.Current = Cursors.Default;
+            }
             foreach (string entry in dir)
                 lstDirectory.Items.Add(entry);
 
             lblCurrentDirectory.Text = (_CurrentPath == "") ? "<root>" : _CurrentPath;
+
+            AllowEditing();
         }
 
 
         private void DirectBackup()
         {
-            string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
+            string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-HHmm"));
             Directory.CreateDirectory(newBackupPath);
 
             CloseComm();
@@ -441,7 +545,7 @@ namespace AmpyFileManager
 
             CloseComm();
 
-            string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-hhmm"));
+            string newBackupPath = Path.Combine(_BackupPath, DateTime.Now.ToString("ByyyyMMdd-HHmm"));
             Directory.CreateDirectory(newBackupPath);
 
             string BackupCommand = Path.Combine(newBackupPath, "backup.bat");
@@ -458,6 +562,8 @@ namespace AmpyFileManager
             p.Start();
             p.WaitForExit();
 
+            CleanPath(newBackupPath);
+
             Cursor.Current = Cursors.Default;
         }
 
@@ -470,12 +576,12 @@ namespace AmpyFileManager
             {
                 if (item.StartsWith("<"))
                 {
-                    msg += item.Substring(1, item.Length - 2) + "\r\n";
+                    msg += item.Substring(1, item.Length - 2) + CRLF;
                 }
                 else
                 {
                     string revitem = item.Replace("/", "\\");
-                    msg += "ampy -p " + _ESP.COMM_PORT + " get " + item + " " + revitem.Substring(1) + "\r\n";
+                    msg += "ampy -p " + _ESP.COMM_PORT + " get " + item + " " + revitem.Substring(1) + CRLF;
                 }
             }
             using (StreamWriter sw = new StreamWriter(output))
@@ -493,12 +599,12 @@ namespace AmpyFileManager
             {
                 if (item.StartsWith("<"))
                 {
-                    msg += "ampy -p " + _ESP.COMM_PORT + " " + item.Substring(1, item.Length - 2) + "\r\n";
+                    msg += "ampy -p " + _ESP.COMM_PORT + " " + item.Substring(1, item.Length - 2) + CRLF;
                 }
                 else
                 {
                     string revitem = item.Replace("/", "\\");
-                    msg += "ampy -p " + _ESP.COMM_PORT + " put " + revitem.Substring(1) + " " + item + "\r\n";
+                    msg += "ampy -p " + _ESP.COMM_PORT + " put " + revitem.Substring(1) + " " + item + CRLF;
                 }
             }
             using (StreamWriter sw = new StreamWriter(output))
@@ -554,44 +660,6 @@ namespace AmpyFileManager
                 }
         }
 
-        private void OpenItem()
-        {
-            string selectedItem = lstDirectory.Text;
-            if (selectedItem == "<..>") // Go up one directory
-            {
-                int lastslash = _CurrentPath.LastIndexOf("/");
-                if (lastslash == 0)
-                    _CurrentPath = "";
-                else
-                    _CurrentPath = _CurrentPath.Substring(0, lastslash);
-                RefreshFileList();
-            }
-            else if (selectedItem.Substring(0, 1) == "<") // Go into the directory
-            {
-                _CurrentPath = _CurrentPath + "/" + selectedItem.Replace("<", "").Replace(">", "");
-                RefreshFileList();
-            }
-            else // Otherwise open the file
-            {
-                _CurrentFile = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
-                string LocalFile = Path.Combine(_SessionPath, selectedItem);
-
-                CloseComm();
-                Cursor.Current = Cursors.WaitCursor;
-                _ESP.GetFile(_CurrentFile, LocalFile);
-                Cursor.Current = Cursors.Default;
-                if (File.Exists(LocalFile))
-                {
-                    using (StreamReader sr = new StreamReader(LocalFile))
-                    {
-                        scintilla1.Text = sr.ReadToEnd().Replace("\r\n", "\n");
-                    }
-                    _FileDirty = false;
-                    lblCurrentFile.Text = _CurrentFile;
-                }
-            }
-        }
-
         private void CloseComm()
         {
             if (serialPort1.IsOpen)
@@ -600,6 +668,8 @@ namespace AmpyFileManager
                 while (serialPort1.IsOpen)
                     Application.DoEvents();
                 picCommStatus.BackColor = Color.Red;
+                btnChangeMode.Text = "Console Mode";
+                btnChangeMode.ForeColor = Color.Red;
             }
         }
 
@@ -608,11 +678,14 @@ namespace AmpyFileManager
             if (!serialPort1.IsOpen)
             {
                 serialPort1.PortName = _ESP.COMM_PORT;
-                serialPort1.NewLine = "\r";
+                serialPort1.NewLine = CR;
                 serialPort1.Open();                
                 while (!serialPort1.IsOpen)
                     Application.DoEvents();
                 picCommStatus.BackColor = Color.Green;
+                btnChangeMode.Text = "Edit Mode";
+                btnChangeMode.ForeColor = Color.Green;
+                FreezeEditing();
             }
         }
 
@@ -620,6 +693,36 @@ namespace AmpyFileManager
         {
             txtTerminal.AppendText(_readBuffer);
             txtTerminal.ScrollToCaret();
+        }
+
+        private void FreezeEditing()
+        {
+            btnRefresh.Enabled = false;
+            btnMkdir.Enabled = false;
+            btnBackup.Enabled = false;
+            btnOpen.Enabled = false;
+            btnNew.Enabled = false;
+            btnDelete.Enabled = false;
+            btnLoad.Enabled = false;
+            btnSave.Enabled = false;
+            btnSaveAs.Enabled = false;
+            lstDirectory.Enabled = false;
+            scintilla1.ReadOnly = true;
+        }
+
+        private void AllowEditing()
+        {
+            btnRefresh.Enabled = true;
+            btnMkdir.Enabled = true;
+            btnBackup.Enabled = true;
+            btnOpen.Enabled = true;
+            btnNew.Enabled = true;
+            btnDelete.Enabled = true;
+            btnLoad.Enabled = true;
+            btnSave.Enabled = true;
+            btnSaveAs.Enabled = true;
+            lstDirectory.Enabled = true;
+            scintilla1.ReadOnly = false;
         }
 
         private void SendCommand()
@@ -661,6 +764,43 @@ namespace AmpyFileManager
                 if (!found)
                     cboCommand.Items.Insert(0, command);
             }
+        }
+
+        private string GetFileOnly(string Filename)
+        {
+            string result = Filename;
+            if (result.IndexOf("/") >= 0)
+            {
+                int pos = result.LastIndexOf("/");
+                result = result.Substring(pos + 1);
+            }
+            return result;
+        }
+
+        private void CleanFile(string FileToClean)
+        {
+            if (File.Exists(FileToClean))
+            {
+                string text = File.ReadAllText(FileToClean);
+                if (text.Contains("\n"))
+                    text = text.Replace("\r", "");
+                else
+                    text = text.Replace("\r", "\n");
+                File.WriteAllText(FileToClean, text);
+            }
+        }
+
+        private void CleanPath(string RootPath)
+        {
+            string[] files = Directory.GetFiles(RootPath);
+            foreach (string file in files)
+            {
+                if (file.EndsWith(".py") || file.EndsWith(".txt"))
+                    CleanFile(file);
+            }
+            string[] dirs = Directory.GetDirectories(RootPath);
+            foreach (string dir in dirs)
+                CleanPath(dir);
         }
 
         private void ConfigureForPython(Scintilla scintilla)
@@ -768,6 +908,5 @@ namespace AmpyFileManager
         }
 
         #endregion
-
     }
 }
