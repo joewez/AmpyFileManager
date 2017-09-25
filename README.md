@@ -27,8 +27,13 @@ All the features are pretty self-explanatory, but here is just a short descripti
 
 - To open a file for viewing or editing, select the file and click "Open" (or just double-click the filename)
 - To go into a sub-folder select the folder and click "Open" (or just double-click the folder name)
+- "New" will prepare a new file for editing
 - "Load" will allow you to import a file
 - "Delete" will delete the file from the device
+- "MKDIR" will allow you to create a sub-folder
+- "Refresh" will reread the file list of the current directory
+- "Backup Device" will prepare end execute a batch file that will backup the contents of the device
+- "Console/Edit Mode" will toggle between an active console window and an active edit area
 
 ADDITIONAL INFO:
 
@@ -37,7 +42,13 @@ ADDITIONAL INFO:
 
 CAVEATS:
 
+- Because of some limitations, in order to use this tool you must follow this guideline...
+    - Directories will be recognized by their lack of an extension
+    - Editable files are recognized by their use of an extension 
 - Although it should work with any device that AMPY works with, it has only been tested with a Wemos D1 Mini and a Witty Cloud Board
-- This is mainly for text files (binary files have not been tested)
-- Switching between the terminal and the file manager (and back) is a little rough.  You may have to "Refresh" or try again to get a feature to work.
+- This is mainly for text files (binary files will upload to the device but will not download correctly)
+- Switching between the console and the editor (and back) is a little rough.  
+    - You may have to "Refresh" or try again to get a feature to work.
+    - Sometimes the software will pause until the device is momentarily unplugged
+    - This is highly dependent on the type of application that is running
 
