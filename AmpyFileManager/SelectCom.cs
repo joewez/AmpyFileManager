@@ -1,12 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AmpyFileManager
@@ -21,7 +16,7 @@ namespace AmpyFileManager
         private void SelectCom_Load(object sender, EventArgs e)
         {
             cboPorts.Items.Clear();
-            string[] ports = SerialPort.GetPortNames();
+            string[] ports = SerialPort.GetPortNames().OrderBy(s => Convert.ToInt32(s.Substring(3))).ToArray();
             foreach (string port in ports)
                 cboPorts.Items.Add(port);
         }

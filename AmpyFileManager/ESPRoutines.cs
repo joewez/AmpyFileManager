@@ -128,6 +128,18 @@ namespace AmpyFileManager
             p.WaitForExit();
         }
 
+        public void DeleteDir(string DirectoryToDelete)
+        {
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = "ampy";
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " rmdir " + DirectoryToDelete;
+            p.Start();
+            p.WaitForExit();
+        }
+
         public string GetFileText(string file)
         {
             string contents = "";
@@ -146,7 +158,7 @@ namespace AmpyFileManager
             return contents.Replace("\r\r", "");
         }
 
-        public List<string> GetDir(string path)
+        public List<string> GetDir(string path, string LB, string RB)
         {
             List<string> dir = new List<string>();
 
@@ -175,7 +187,7 @@ namespace AmpyFileManager
                 }
 
             foreach (string folder in folders.OrderBy(f => f).ToList())
-                dir.Add("<" + folder + ">");
+                dir.Add(LB + folder + RB);
             foreach (string file in files.OrderBy(f => f).ToList())
                 dir.Add(file);
 
