@@ -59,7 +59,7 @@ namespace AmpyFileManager
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " put " + SrcFile + " " + DstFile;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " put \"" + SrcFile + "\" " + DstFile;
             p.Start();
             p.WaitForExit();
         }
@@ -73,7 +73,7 @@ namespace AmpyFileManager
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " get " + espfile + " " + localfile;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " get " + espfile + " \"" + localfile + "\"";
             p.Start();
             string errors = p.StandardError.ReadToEnd();
             string output = p.StandardOutput.ReadToEnd();
