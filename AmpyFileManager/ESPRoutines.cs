@@ -32,7 +32,7 @@ namespace AmpyFileManager
                 {
                     SelectCom s = new SelectCom();
                     s.ShowDialog();
-                    COMM_PORT = ((ComboBox)s.Controls["cboPorts"]).Text;
+                    COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
                 }
             }
@@ -44,10 +44,10 @@ namespace AmpyFileManager
                 {
                     SelectCom s = new SelectCom();
                     s.ShowDialog();
-                    COMM_PORT = ((ComboBox)s.Controls["cboPorts"]).Text;
+                    COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
                 }
-                ConfigurationManager.AppSettings["CommPort"] = COMM_PORT;
+                //ConfigurationManager.AppSettings["CommPort"] = COMM_PORT;
             }
 
         }

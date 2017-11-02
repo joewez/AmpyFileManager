@@ -8,6 +8,8 @@ namespace AmpyFileManager
 {
     public partial class SelectCom : Form
     {
+        public string SELECTED_COMM_PORT = "EXIT";
+
         public SelectCom()
         {
             InitializeComponent();
@@ -23,6 +25,7 @@ namespace AmpyFileManager
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            SELECTED_COMM_PORT = cboPorts.Text;
             this.Close();
         }
 
