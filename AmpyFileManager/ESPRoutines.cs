@@ -14,7 +14,7 @@ namespace AmpyFileManager
     public class ESPRoutines
     {
         public string COMM_PORT = "";
-
+        public int BAUD_RATE = 115200;
         public ESPRoutines()
         {
             string[] ports = SerialPort.GetPortNames();
@@ -50,6 +50,9 @@ namespace AmpyFileManager
                 //ConfigurationManager.AppSettings["CommPort"] = COMM_PORT;
             }
 
+            string baudratestr = ConfigurationManager.AppSettings["BaudRate"];
+            if (baudratestr != "")
+                BAUD_RATE = Convert.ToInt32(baudratestr);
         }
 
         public void PutFile(string SrcFile, string DstFile)
@@ -59,7 +62,7 @@ namespace AmpyFileManager
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " put \"" + SrcFile + "\" " + DstFile;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " put \"" + SrcFile + "\" " + DstFile;
             p.Start();
             p.WaitForExit();
         }
@@ -73,7 +76,7 @@ namespace AmpyFileManager
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " get " + espfile + " \"" + localfile + "\"";
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " get " + espfile + " \"" + localfile + "\"";
             p.Start();
             string errors = p.StandardError.ReadToEnd();
             string output = p.StandardOutput.ReadToEnd();
@@ -92,7 +95,7 @@ namespace AmpyFileManager
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " run " + RunFile;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " run " + RunFile;
             p.Start();
             output = p.StandardOutput.ReadToEnd();
             errors = p.StandardError.ReadToEnd();
@@ -111,7 +114,7 @@ namespace AmpyFileManager
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " rm " + DeleteFile;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " rm " + DeleteFile;
             p.Start();
             p.WaitForExit();
         }
@@ -123,7 +126,7 @@ namespace AmpyFileManager
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " mkdir " + NewDirectory;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " mkdir " + NewDirectory;
             p.Start();
             p.WaitForExit();
         }
@@ -135,7 +138,7 @@ namespace AmpyFileManager
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " rmdir " + DirectoryToDelete;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " rmdir " + DirectoryToDelete;
             p.Start();
             p.WaitForExit();
         }
@@ -150,7 +153,7 @@ namespace AmpyFileManager
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " get " + file;
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " get " + file;
             p.Start();
             contents = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
@@ -168,7 +171,7 @@ namespace AmpyFileManager
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " ls" + ((!String.IsNullOrEmpty(path)) ? " " + path : "");
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " ls" + ((!String.IsNullOrEmpty(path)) ? " " + path : "");
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();

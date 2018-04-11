@@ -16,7 +16,16 @@ namespace AmpyFileManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Manager());
+
+            ESPRoutines ESP = new ESPRoutines();
+            while (ESP.COMM_PORT == "")
+            {
+                MessageBox.Show("Must select the COM port your device is on.");
+                ESP = new ESPRoutines();
+            }
+
+            if (ESP.COMM_PORT != "EXIT")
+                Application.Run(new Manager(ESP));
         }
     }
 }

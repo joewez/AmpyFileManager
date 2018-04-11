@@ -19,22 +19,21 @@ namespace AmpyFileManager
         private const string RBracket = "]";
 
         private bool _FileDirty = false;
-        private bool _JustOpened = true;
-        private bool _TerminalReady = false;
         private string _BackupPath = string.Empty;
         private string _SessionPath = string.Empty;
         private string _CurrentPath = string.Empty;
         private string _CurrentFile = string.Empty;
         private string _EditableExtensions = string.Empty;
         private string _command = string.Empty;
-        private string _delayed_command = string.Empty;
         private string _readBuffer = string.Empty;
-        private int _enterPos = 0;
+        private bool _JustOpened = false;
+        private string _runCommand = string.Empty;
 
         private ESPRoutines _ESP;   // Wrapper for AMPY invocations
 
-        public Manager()
+        public Manager(ESPRoutines ESP)
         {
+            _ESP = ESP;
             InitializeComponent();            
         }
 
@@ -42,16 +41,6 @@ namespace AmpyFileManager
 
         private void Manager_Load(object sender, EventArgs e)
         {
-            _ESP = new ESPRoutines();
-            while (_ESP.COMM_PORT == "")
-            {
-                MessageBox.Show("Must select the COM port your device is on.");
-                _ESP = new ESPRoutines();
-            }
-
-            if (_ESP.COMM_PORT == "EXIT")
-                tmrShutdown.Enabled = true;
-
             this.Text = "Ampy File Manager (" + _ESP.COMM_PORT + ")";
 
             // Get the dir where we save things
@@ -75,20 +64,6 @@ namespace AmpyFileManager
 
             // load help links
             LoadHelpDropdown();
-
-            // handle the <enter> key when in the terminal
-            txtTerminal.KeyPress += (sndr, ev) =>
-            {
-                if (ev.KeyChar.Equals((char)13))
-                {
-                    SendCommand();
-                    ev.Handled = true;
-                }
-                else if (ev.KeyChar == 3)
-                    InvokeControlC();
-                else if (ev.KeyChar == 4)
-                    InvokeControlD();
-            };
 
             // if specified use the baud rate in the config
             string BaudRate = ConfigurationManager.AppSettings["BaudRate"];
@@ -276,21 +251,19 @@ namespace AmpyFileManager
 
         private void tmrCommStatus_Tick(object sender, EventArgs e)
         {
-            if (serialPort1.IsOpen)
+            if (serialPort1.IsOpen && picCommStatus.BackColor != Color.Green)
+            {
                 picCommStatus.BackColor = Color.Green;
-            else
+            }
+            else if (!serialPort1.IsOpen && picCommStatus.BackColor != Color.Red)
+            { 
                 picCommStatus.BackColor = Color.Red;
+            }
+
             if (_FileDirty && lblCurrentFile.ForeColor != Color.Red)
                 lblCurrentFile.ForeColor = Color.Red;
             else if (!_FileDirty && lblCurrentFile.ForeColor == Color.Red)
-                lblCurrentFile.ForeColor = Color.Black;
-
-            if (_TerminalReady && _delayed_command != "")
-            {
-                txtTerminal.Text += "import " + _delayed_command;
-                _delayed_command = "";
-                SendCommand();
-            }
+                lblCurrentFile.ForeColor = Color.Black;            
         }
 
         private void btnChangeMode_Click(object sender, EventArgs e)
@@ -341,18 +314,41 @@ namespace AmpyFileManager
                 {
                     if (selectedItem.ToLower().EndsWith(".py"))
                     {
-                        _delayed_command = selectedItem.Substring(0, selectedItem.Length - 3);
+                        _runCommand = "import " + selectedItem.Substring(0, selectedItem.Length - 3);
                         OpenComm();
                         txtTerminal.Focus();
+                        tmrRunCommand.Enabled = true;
                     }
                 }
             }
         }
 
-        private void tmrShutdown_Tick(object sender, EventArgs e)
+        private void txtTerminal_KeyPress(object sender, KeyPressEventArgs e)
         {
-            tmrShutdown.Enabled = false;
-            this.Close();
+            try
+            {
+                if (serialPort1.IsOpen)
+                {
+                    char[] key = new char[1];
+                    key[0] = e.KeyChar;
+                    serialPort1.Write(key, 0, 1);
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        private void tmrRunCommand_Tick(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen && _runCommand != "")
+            {
+                serialPort1.WriteLine(_runCommand);
+                _runCommand = "";
+                tmrRunCommand.Enabled = false;
+            }
         }
 
         #endregion
@@ -378,7 +374,7 @@ namespace AmpyFileManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "btnControlC_Click() Error");
+                Debug.WriteLine(ex.Message);
             }
         }
 
@@ -401,7 +397,7 @@ namespace AmpyFileManager
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "btnControlD_Click() Error");
+                Debug.WriteLine(ex.Message);
             }
         }
 
@@ -640,8 +636,11 @@ namespace AmpyFileManager
                 }
                 else
                 {
-                    string revitem = item.Replace("/", "\\");
-                    msg += "ampy -p " + _ESP.COMM_PORT + " get " + item + " " + revitem.Substring(1) + CRLF;
+                    if (EditableFile(item))
+                    {
+                        string revitem = item.Replace("/", "\\");
+                        msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " get " + item + " " + revitem.Substring(1) + CRLF;
+                    }
                 }
             }
             using (StreamWriter sw = new StreamWriter(output))
@@ -659,12 +658,12 @@ namespace AmpyFileManager
             {
                 if (item.StartsWith(LBracket))
                 {
-                    msg += "ampy -p " + _ESP.COMM_PORT + " " + item.Substring(1, item.Length - 2) + CRLF;
+                    msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " " + item.Substring(1, item.Length - 2) + CRLF;
                 }
                 else
                 {
                     string revitem = item.Replace("/", "\\");
-                    msg += "ampy -p " + _ESP.COMM_PORT + " put " + revitem.Substring(1) + " " + item + CRLF;
+                    msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " put " + revitem.Substring(1) + " " + item + CRLF;
                 }
             }
             using (StreamWriter sw = new StreamWriter(output))
@@ -728,8 +727,6 @@ namespace AmpyFileManager
                 while (serialPort1.IsOpen)
                     Application.DoEvents();
 
-                _TerminalReady = false;
-
                 picCommStatus.BackColor = Color.Red;
                 btnChangeMode.Text = "Console Mode";
                 btnChangeMode.ForeColor = Color.Red;
@@ -757,41 +754,37 @@ namespace AmpyFileManager
 
         public void DoUpdate(object sender, System.EventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(_readBuffer))
+            if (!String.IsNullOrEmpty(_readBuffer))
             {
-                bool introFound = false;
-
                 // remove any jibberish when opening the port
                 if (_JustOpened)
                 {
                     int goodPos = _readBuffer.IndexOf("MicroPython");
                     if (goodPos > 0)
                     {
-                        //Debug.Write("Junk=" + _readBuffer.Substring(0, goodPos - 1));
                         _readBuffer = _readBuffer.Substring(goodPos);
                         _JustOpened = false;
-                        introFound = true;
                     }
                     else
                     {
-                        //Debug.Write("Junk=" + _readBuffer);
                         _readBuffer = "";
                     }
                 }
 
-                // remove any command echo
-                if (!String.IsNullOrWhiteSpace(_command) && _readBuffer.Contains(_command))
-                    _readBuffer = _readBuffer.Replace(_command, "");
+                if (_readBuffer == "\b\u001b[K")
+                {
+                    txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
+                    txtTerminal.SelectionLength = 1;
+                    txtTerminal.SelectedText = "";
+                }                
+                else
+                {
+                    txtTerminal.AppendText(_readBuffer);
+                    txtTerminal.SelectionStart = txtTerminal.Text.Length;
+                    txtTerminal.SelectionLength = 0;
+                    txtTerminal.ScrollToCaret();
+                }
 
-                txtTerminal.AppendText(_readBuffer);
-
-                _enterPos = txtTerminal.Text.Length;
-                txtTerminal.SelectionStart = _enterPos;
-                txtTerminal.SelectionLength = 0;
-                txtTerminal.ScrollToCaret();
-
-                if (!_TerminalReady && introFound)
-                    _TerminalReady = true;
             }
         }
 
@@ -829,23 +822,6 @@ namespace AmpyFileManager
             cboHelp.Enabled = true;
             btnLoadHelp.Enabled = true;
             btnRun.Enabled = true;
-        }
-
-        private void SendCommand()
-        {
-            try
-            {
-                OpenComm();
-                if (serialPort1.IsOpen)
-                {
-                    _command = txtTerminal.Text.Substring(_enterPos);
-                    serialPort1.WriteLine(_command);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "SendCommand() Error");
-            }
         }
 
          private string GetFileOnly(string Filename)
@@ -1012,6 +988,5 @@ namespace AmpyFileManager
         }
 
         #endregion
-
     }
 }

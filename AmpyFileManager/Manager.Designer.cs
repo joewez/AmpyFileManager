@@ -68,7 +68,7 @@
             this.btnControlD = new System.Windows.Forms.Button();
             this.btnControlC = new System.Windows.Forms.Button();
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
-            this.tmrShutdown = new System.Windows.Forms.Timer(this.components);
+            this.tmrRunCommand = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -453,6 +453,7 @@
             // 
             // txtTerminal
             // 
+            this.txtTerminal.AcceptsTab = true;
             this.txtTerminal.BackColor = System.Drawing.Color.Black;
             this.txtTerminal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTerminal.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -464,6 +465,7 @@
             this.txtTerminal.Size = new System.Drawing.Size(926, 139);
             this.txtTerminal.TabIndex = 0;
             this.txtTerminal.Enter += new System.EventHandler(this.txtTerminal_Enter);
+            this.txtTerminal.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTerminal_KeyPress);
             // 
             // panel4
             // 
@@ -522,10 +524,10 @@
             this.tmrCommStatus.Interval = 1000;
             this.tmrCommStatus.Tick += new System.EventHandler(this.tmrCommStatus_Tick);
             // 
-            // tmrShutdown
+            // tmrRunCommand
             // 
-            this.tmrShutdown.Interval = 1000;
-            this.tmrShutdown.Tick += new System.EventHandler(this.tmrShutdown_Tick);
+            this.tmrRunCommand.Interval = 3000;
+            this.tmrRunCommand.Tick += new System.EventHandler(this.tmrRunCommand_Tick);
             // 
             // Manager
             // 
@@ -605,6 +607,6 @@
         private System.Windows.Forms.ComboBox cboHelp;
         private System.Windows.Forms.Button btnLoadHelp;
         private System.Windows.Forms.Button btnRun;
-        private System.Windows.Forms.Timer tmrShutdown;
+        private System.Windows.Forms.Timer tmrRunCommand;
     }
 }
