@@ -111,6 +111,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Hopstarter-Soft-Scraps-Text-Edit.ico" />
+    <Content Include="readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WemosD1MiniMicropythonPins.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
