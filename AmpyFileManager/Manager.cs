@@ -771,6 +771,7 @@ namespace AmpyFileManager
                     }
                 }
 
+                // catch the backspace key
                 if (_readBuffer == "\b\u001b[K")
                 {
                     txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
@@ -783,6 +784,12 @@ namespace AmpyFileManager
                     txtTerminal.SelectionStart = txtTerminal.Text.Length;
                     txtTerminal.SelectionLength = 0;
                     txtTerminal.ScrollToCaret();
+                }
+
+                // truncate the terminal buffer
+                if (txtTerminal.TextLength > 16384)
+                {
+                    txtTerminal.Text = txtTerminal.Text.Substring(txtTerminal.TextLength - 2048);
                 }
 
             }
