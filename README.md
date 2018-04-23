@@ -9,7 +9,7 @@ As a development tool, I wrote the utility to mainly just edit the files directl
 
 A precompiled binary is available for download here:
 
-  https://www.dropbox.com/s/d6xrh3nd1py5ivr/AmpyFileManager3.zip?dl=0
+  http://wezensky.no-ip.org/shared/afm.zip
   
 Just unzip to a convenient location and run the AmpyFileManager.exe. NOTE: The latest .Net Framework is required for this application to run.
 
