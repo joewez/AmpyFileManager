@@ -1,5 +1,8 @@
 # AmpyFileManager
 Windows GUI for the Adafruit MicroPython Utility
+<p align="center">
+  <img src="https://github.com/joewez/AmpyFileManager/blob/master/afm.jpg" alt="Screenshot"/>
+</p>
 
 A simple GUI wrapper that executes the AMPY command to manipulate the files on an ESP8266 board running MicroPython.
 
