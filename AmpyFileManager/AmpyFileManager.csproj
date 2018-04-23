@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Hopstarter-Soft-Scraps-Text-Edit.ico</ApplicationIcon>
+    <ApplicationIcon>esp8266.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -110,6 +110,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="esp8266.ico" />
     <Content Include="Hopstarter-Soft-Scraps-Text-Edit.ico" />
     <Content Include="readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

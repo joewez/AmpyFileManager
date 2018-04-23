@@ -63,12 +63,15 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtTerminal = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnCustom = new System.Windows.Forms.Button();
             this.panel7 = new System.Windows.Forms.Panel();
             this.picCommStatus = new System.Windows.Forms.PictureBox();
             this.btnControlD = new System.Windows.Forms.Button();
             this.btnControlC = new System.Windows.Forms.Button();
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
             this.tmrRunCommand = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -87,6 +90,7 @@
             this.panel4.SuspendLayout();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -295,7 +299,7 @@
             // 
             // lstDirectory
             // 
-            this.lstDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.lstDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(225)))), ((int)(((byte)(174)))));
             this.lstDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstDirectory.FormattingEnabled = true;
@@ -455,6 +459,7 @@
             // 
             this.txtTerminal.AcceptsTab = true;
             this.txtTerminal.BackColor = System.Drawing.Color.Black;
+            this.txtTerminal.ContextMenuStrip = this.contextMenuStrip1;
             this.txtTerminal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTerminal.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTerminal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -465,10 +470,13 @@
             this.txtTerminal.Size = new System.Drawing.Size(926, 139);
             this.txtTerminal.TabIndex = 0;
             this.txtTerminal.Enter += new System.EventHandler(this.txtTerminal_Enter);
+            this.txtTerminal.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTerminal_KeyDown);
             this.txtTerminal.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTerminal_KeyPress);
+            this.txtTerminal.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.txtTerminal_PreviewKeyDown);
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.btnCustom);
             this.panel4.Controls.Add(this.panel7);
             this.panel4.Controls.Add(this.btnControlD);
             this.panel4.Controls.Add(this.btnControlC);
@@ -477,6 +485,17 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(99, 139);
             this.panel4.TabIndex = 1;
+            // 
+            // btnCustom
+            // 
+            this.btnCustom.Location = new System.Drawing.Point(13, 62);
+            this.btnCustom.Name = "btnCustom";
+            this.btnCustom.Size = new System.Drawing.Size(75, 22);
+            this.btnCustom.TabIndex = 17;
+            this.btnCustom.Text = "Custom...";
+            this.btnCustom.UseVisualStyleBackColor = true;
+            this.btnCustom.Visible = false;
+            this.btnCustom.Click += new System.EventHandler(this.btnCustom_Click);
             // 
             // panel7
             // 
@@ -529,6 +548,20 @@
             this.tmrRunCommand.Interval = 3000;
             this.tmrRunCommand.Tick += new System.EventHandler(this.tmrRunCommand_Tick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pasteToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStrip1_ItemClicked);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -563,6 +596,7 @@
             this.panel4.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picCommStatus)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -608,5 +642,8 @@
         private System.Windows.Forms.Button btnLoadHelp;
         private System.Windows.Forms.Button btnRun;
         private System.Windows.Forms.Timer tmrRunCommand;
+        private System.Windows.Forms.Button btnCustom;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
     }
 }

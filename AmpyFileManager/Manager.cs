@@ -28,6 +28,8 @@ namespace AmpyFileManager
         private string _readBuffer = string.Empty;
         private bool _JustOpened = false;
         private string _runCommand = string.Empty;
+        private int _bufferLimit = 16384;
+        private int _bufferResetSize = 2048;
 
         private ESPRoutines _ESP;   // Wrapper for AMPY invocations
 
@@ -76,6 +78,17 @@ namespace AmpyFileManager
             _EditableExtensions = ConfigurationManager.AppSettings["EditExtensions"];
             if (String.IsNullOrWhiteSpace(_EditableExtensions))
                 _EditableExtensions = "py,txt,html,js,css,json";
+
+            // set some colors
+            string bcolor = ConfigurationManager.AppSettings["ExplorerColor"];
+            if (bcolor.Contains(","))
+            {
+                string[] rgb = bcolor.Split(',');
+                lstDirectory.BackColor = Color.FromArgb(Convert.ToInt32(rgb[0]), Convert.ToInt32(rgb[1]), Convert.ToInt32(rgb[2]));
+            }
+            else
+                lstDirectory.BackColor = Color.FromName(bcolor);
+            txtTerminal.Font = new Font(ConfigurationManager.AppSettings["TerminalFont"], Convert.ToSingle(ConfigurationManager.AppSettings["TerminalFontSize"]), FontStyle.Regular);
 
             ConfigureForPython(scintilla1);
 
@@ -349,6 +362,50 @@ namespace AmpyFileManager
                 _runCommand = "";
                 tmrRunCommand.Enabled = false;
             }
+        }
+
+        private void txtTerminal_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+                e.IsInputKey = true;
+        }
+
+        private void txtTerminal_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                byte[] b = { 27, 91, 65 };
+                serialPort1.Write(b, 0, 3);
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                byte[] b = { 27, 91, 66 };
+                serialPort1.Write(b, 0, 3);
+            }
+            else if ((e.KeyCode == Keys.V && e.Control) || (e.KeyCode == Keys.Insert && e.Shift))
+            {
+                serialPort1.Write(Clipboard.GetText());
+            }
+        }
+
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+            string keysequence = Microsoft.VisualBasic.Interaction.InputBox("Key Sequence:", "Custom", "");
+            if (keysequence != "")
+            {
+                string[] items = keysequence.Split(',');
+                byte[] b = { 0x00 };
+                foreach (string item in items)
+                {
+                    b[0] = Convert.ToByte(item);
+                    serialPort1.Write(b, 0, 1);
+                }
+            }
+        }
+
+        private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            serialPort1.Write(Clipboard.GetText());
         }
 
         #endregion
@@ -771,25 +828,84 @@ namespace AmpyFileManager
                     }
                 }
 
-                // catch the backspace key
-                if (_readBuffer == "\b\u001b[K")
+                // check that we have something to process
+                if (_readBuffer != "")
                 {
-                    txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
-                    txtTerminal.SelectionLength = 1;
-                    txtTerminal.SelectedText = "";
-                }                
-                else
-                {
-                    txtTerminal.AppendText(_readBuffer);
-                    txtTerminal.SelectionStart = txtTerminal.Text.Length;
-                    txtTerminal.SelectionLength = 0;
-                    txtTerminal.ScrollToCaret();
+                    // process a single backspace
+                    if (_readBuffer == "\b\u001b[K")
+                    {
+                        txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
+                        txtTerminal.SelectionLength = 1;
+                        txtTerminal.SelectedText = "";
+                    }
+                    else if (_readBuffer[0] == 27 && _readBuffer[1] == 91)  // else if it begins with an escape sequence...
+                    {
+                        string cmd = _readBuffer.Substring(2);
+                        //MessageBox.Show(cmd);
+                        int pos = cmd.IndexOf('D');
+                        if (pos > 0)
+                        {
+                            string countstr = cmd.Substring(0, pos);
+                            int count = Convert.ToInt16(countstr);
+                            if (count > 0)
+                            {
+                                txtTerminal.SelectionStart = txtTerminal.Text.Length - count;
+                                txtTerminal.SelectionLength = count;
+                                txtTerminal.SelectedText = "";
+                            }
+                            string remainder = cmd.Substring(pos + 1);
+                            if (remainder != "")
+                            {
+                                //MessageBox.Show(remainder);
+                                if (remainder == "\b\u001b[K")
+                                {
+                                    txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
+                                    txtTerminal.SelectionLength = 1;
+                                    txtTerminal.SelectedText = "";
+                                }
+                                else
+                                {
+                                    if (remainder[0] == 27 && remainder[1] == 91 && remainder[2] == 75)
+                                    {
+                                        txtTerminal.SelectionStart = txtTerminal.Text.Length;
+                                        txtTerminal.SelectionLength = 0;
+                                        txtTerminal.SelectedText = remainder.Substring(3);
+                                    }
+                                    else
+                                    {
+                                        txtTerminal.AppendText(remainder);
+                                        txtTerminal.SelectionStart = txtTerminal.Text.Length;
+                                        txtTerminal.SelectionLength = 0;
+                                        txtTerminal.ScrollToCaret();
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (cmd == "K")
+                            {
+                                txtTerminal.SelectionStart = txtTerminal.Text.Length - 1;
+                                txtTerminal.SelectionLength = 1;
+                                txtTerminal.SelectedText = "";
+                            }
+                            else
+                                MessageBox.Show(cmd);
+                        }
+                    }
+                    else // else it is just some text from the device
+                    {
+                        txtTerminal.AppendText(_readBuffer);
+                        txtTerminal.SelectionStart = txtTerminal.Text.Length;
+                        txtTerminal.SelectionLength = 0;
+                        txtTerminal.ScrollToCaret();
+                    }
                 }
 
                 // truncate the terminal buffer
-                if (txtTerminal.TextLength > 16384)
+                if (txtTerminal.TextLength > _bufferLimit)
                 {
-                    txtTerminal.Text = txtTerminal.Text.Substring(txtTerminal.TextLength - 2048);
+                    txtTerminal.Text = txtTerminal.Text.Substring(txtTerminal.TextLength - _bufferResetSize);
                 }
 
             }
@@ -808,8 +924,8 @@ namespace AmpyFileManager
             btnSaveAs.Enabled = false;
             lstDirectory.Enabled = false;
             scintilla1.ReadOnly = true;
-            cboHelp.Enabled = false;
-            btnLoadHelp.Enabled = false;
+            //cboHelp.Enabled = false;
+            //btnLoadHelp.Enabled = false;
             btnRun.Enabled = false;
         }
 
@@ -826,8 +942,8 @@ namespace AmpyFileManager
             btnSaveAs.Enabled = true;
             lstDirectory.Enabled = true;
             scintilla1.ReadOnly = false;
-            cboHelp.Enabled = true;
-            btnLoadHelp.Enabled = true;
+            //cboHelp.Enabled = true;
+            //btnLoadHelp.Enabled = true;
             btnRun.Enabled = true;
         }
 
@@ -955,28 +1071,29 @@ namespace AmpyFileManager
             scintilla.AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
 
             // Set the styles
-            scintilla.Styles[Style.Python.Default].ForeColor = Color.FromArgb(0x80, 0x80, 0x80);
-            scintilla.Styles[Style.Python.CommentLine].ForeColor = Color.FromArgb(0x00, 0x7F, 0x00);
+            scintilla.Styles[Style.Python.Default].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
+            scintilla.Styles[Style.Python.CommentLine].ForeColor = Color.FromArgb(0x60, 0x60, 0x60);
             scintilla.Styles[Style.Python.CommentLine].Italic = true;
             scintilla.Styles[Style.Python.Number].ForeColor = Color.FromArgb(0x00, 0x7F, 0x7F);
             scintilla.Styles[Style.Python.String].ForeColor = Color.FromArgb(0x7F, 0x00, 0x7F);
             scintilla.Styles[Style.Python.Character].ForeColor = Color.FromArgb(0x7F, 0x00, 0x7F);
-            scintilla.Styles[Style.Python.Word].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
+            scintilla.Styles[Style.Python.Word].ForeColor = Color.FromArgb(0x00, 0x00, 0x00);
             scintilla.Styles[Style.Python.Word].Bold = true;
             scintilla.Styles[Style.Python.Triple].ForeColor = Color.FromArgb(0x7F, 0x00, 0x00);
             scintilla.Styles[Style.Python.TripleDouble].ForeColor = Color.FromArgb(0x7F, 0x00, 0x00);
-            scintilla.Styles[Style.Python.ClassName].ForeColor = Color.FromArgb(0x00, 0x00, 0xFF);
+            scintilla.Styles[Style.Python.ClassName].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
             scintilla.Styles[Style.Python.ClassName].Bold = true;
-            scintilla.Styles[Style.Python.DefName].ForeColor = Color.FromArgb(0x00, 0x7F, 0x7F);
+            scintilla.Styles[Style.Python.DefName].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
             scintilla.Styles[Style.Python.DefName].Bold = true;
             scintilla.Styles[Style.Python.Operator].Bold = true;
-            // scintilla.Styles[Style.Python.Identifier] ... your keywords styled here
-            scintilla.Styles[Style.Python.CommentBlock].ForeColor = Color.FromArgb(0x7F, 0x7F, 0x7F);
+            scintilla.Styles[Style.Python.Identifier].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
+            scintilla.Styles[Style.Python.CommentBlock].ForeColor = Color.FromArgb(0x60, 0x60, 0x60);
             scintilla.Styles[Style.Python.CommentBlock].Italic = true;
-            scintilla.Styles[Style.Python.StringEol].ForeColor = Color.FromArgb(0x00, 0x00, 0x00);
+            scintilla.Styles[Style.Python.StringEol].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
             scintilla.Styles[Style.Python.StringEol].BackColor = Color.FromArgb(0xE0, 0xC0, 0xE0);
+            scintilla.Styles[Style.Python.StringEol].Bold = true;
             scintilla.Styles[Style.Python.StringEol].FillLine = true;
-            scintilla.Styles[Style.Python.Word2].ForeColor = Color.FromArgb(0x40, 0x70, 0x90);
+            scintilla.Styles[Style.Python.Word2].ForeColor = Color.FromArgb(0x00, 0x00, 0x7F);
             scintilla.Styles[Style.Python.Decorator].ForeColor = Color.FromArgb(0x80, 0x50, 0x00);
 
             // Important for Python
@@ -995,5 +1112,6 @@ namespace AmpyFileManager
         }
 
         #endregion
+
     }
 }

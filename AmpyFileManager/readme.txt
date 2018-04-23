@@ -56,6 +56,7 @@ CAVEATS:
 - Because of some limitations, in order to use this tool you must follow this guideline...
   Directories will be recognized by their lack of an extension
   Editable files are recognized by their use of an extension
+- The terminal is limited in it's capabilities
 - Although it should work with any device that AMPY works with, it has only been tested with a Wemos D1 Mini 
   and a Witty Cloud Board
 - This is mainly for text files (binary files will upload to the device but will not download correctly)
