@@ -15,7 +15,7 @@ have also embedded a simple terminal emulator to send commands to the serial REP
 
 A precompiled binary is available for download here:
 
-	http://wezensky.no-ip.org/shared/AmpyFileManager.zip
+	http://wezensky.no-ip.org/shared/afm.zip
 
 PREREQUISITES:
 	1. .Net Framework 4.5.2 or greater
