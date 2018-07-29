@@ -816,7 +816,8 @@ namespace AmpyFileManager
                 // remove any jibberish when opening the port
                 if (_JustOpened)
                 {
-                    int goodPos = _readBuffer.IndexOf("MicroPython");
+                    string markertext = ConfigurationManager.AppSettings["MarkerText"];
+                    int goodPos = _readBuffer.IndexOf(markertext);
                     if (goodPos > 0)
                     {
                         _readBuffer = _readBuffer.Substring(goodPos);
