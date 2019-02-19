@@ -1,4 +1,4 @@
-<i>February 2019 Note: The Adafruit AMPY application is in a state of flux as it is being picked up by a new developer.  Please use version 1.05 with this version of adafruit-ampy.</i>
+<i>February 2019 Note: The Adafruit AMPY application is in a state of flux as it is being picked up by a new developer.  Please use the 1.05 version of adafruit-ampy with this application.</i>
 
 # AmpyFileManager
 Windows GUI for the Adafruit MicroPython Utility
