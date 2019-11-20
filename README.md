@@ -1,4 +1,4 @@
-<i>February 2019 Note: The Adafruit AMPY application is in a state of flux as it is being picked up by a new developer.  Please use the 1.05 version of adafruit-ampy with this application.</i>
+<i>November 2019 Note: The application has been updated to support the latest version of the Adafruit AMPY application. (1.07)</i>
 
 # AmpyFileManager
 Windows GUI for the Adafruit MicroPython Utility
@@ -48,7 +48,7 @@ ADDITIONAL INFO:
 CAVEATS:
 
 - Because of some limitations, in order to use this tool you must follow this guideline...
-    - Directories will be recognized by their lack of an extension
+    - Directories will be recognized by their zero size reported
     - Editable files are recognized by their use of an extension 
 - Although it should work with any device that AMPY works with, it has only been tested with a Wemos D1 Mini and a Witty Cloud Board
 - This is mainly for text files (binary files will upload to the device but will not download correctly)
