@@ -171,7 +171,8 @@ namespace AmpyFileManager
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " ls" + ((!String.IsNullOrEmpty(path)) ? " " + path : "");
+            string nav_path = ((!String.IsNullOrEmpty(path)) ? " " + path : "");
+            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " ls -l" + nav_path;
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
@@ -183,10 +184,20 @@ namespace AmpyFileManager
             foreach (string entry in entries.ToList())
                 if (entry != "")
                 {
-                    if (entry.ToLower().EndsWith(".py") || entry.ToLower().EndsWith(".txt") || entry.IndexOf(".") >= 0)
-                        files.Add(entry);
+                    string tempstr = "";
+                    string filename = "";
+                    string size = "";
+                    if (nav_path != "")
+                        tempstr = entry.Substring(nav_path.Length - 1);
                     else
-                        folders.Add(entry);
+                        tempstr = entry;
+                    filename = tempstr.Substring(0, tempstr.IndexOf(" - "));
+                    size = tempstr.Substring(tempstr.IndexOf(" - ") + 3);
+
+                    if (size.StartsWith("0 bytes"))
+                        folders.Add(filename.Substring(1));
+                    else
+                        files.Add(filename.Substring(1));
                 }
 
             foreach (string folder in folders.OrderBy(f => f).ToList())
