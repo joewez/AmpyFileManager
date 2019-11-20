@@ -195,7 +195,12 @@ namespace AmpyFileManager
                     size = tempstr.Substring(tempstr.IndexOf(" - ") + 3);
 
                     if (size.StartsWith("0 bytes"))
-                        folders.Add(filename.Substring(1));
+                    {
+                        if (filename.Contains("."))
+                            files.Add(filename.Substring(1));
+                        else
+                            folders.Add(filename.Substring(1));
+                    }
                     else
                         files.Add(filename.Substring(1));
                 }
