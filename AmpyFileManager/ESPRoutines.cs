@@ -177,6 +177,20 @@ namespace AmpyFileManager
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
 
+            if (output.IndexOf("ESP module with ESP8266") > -1)
+            {
+                Process p2 = new Process();
+                p2.StartInfo.UseShellExecute = false;
+                p2.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                p2.StartInfo.CreateNoWindow = true;
+                p2.StartInfo.RedirectStandardOutput = true;
+                p2.StartInfo.FileName = "ampy";
+                p2.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " ls -l" + nav_path;
+                p2.Start();
+                output = p2.StandardOutput.ReadToEnd();
+                p2.WaitForExit();
+            }
+
             string[] entries = output.Replace("\r\n", "\t").Split('\t');
 
             List<string> folders = new List<string>();
@@ -191,16 +205,22 @@ namespace AmpyFileManager
                         tempstr = entry.Substring(nav_path.Length - 1);
                     else
                         tempstr = entry.Substring(1);
-                    filename = tempstr.Substring(0, tempstr.IndexOf(" - "));
-                    size = tempstr.Substring(tempstr.IndexOf(" - ") + 3);
+                    int sizepos = tempstr.IndexOf(" - ");
+                    if (sizepos > -1)
+                    {
+                        filename = tempstr.Substring(0, sizepos);
+                        size = tempstr.Substring(sizepos + 3);
 
-                    if (filename.StartsWith("/"))
-                        filename = filename.Substring(1);
+                        if (filename.StartsWith("/"))
+                            filename = filename.Substring(1);
 
-                    if (size.StartsWith("0 bytes"))
-                        folders.Add(filename);
+                        if (size.StartsWith("0 bytes"))
+                            folders.Add(filename);
+                        else
+                            files.Add(filename);
+                    }
                     else
-                        files.Add(filename);
+                        Debug.WriteLine("BAD Filename :" + tempstr);
                 }
 
             foreach (string folder in folders.OrderBy(f => f).ToList())

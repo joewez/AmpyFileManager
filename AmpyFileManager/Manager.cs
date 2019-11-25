@@ -637,13 +637,30 @@ namespace AmpyFileManager
                 lstDirectory.Items.Add(LBracket + ".." + RBracket);
 
             CloseComm();
+
             Cursor.Current = Cursors.WaitCursor;
-            List<string> dir = _ESP.GetDir(_CurrentPath, LBracket, RBracket);
-            if (dir.Count == 1 && dir[0].Length > 15)
+
+            List<string> dir = null;
+
+            bool passed = false;
+            try
             {
                 dir = _ESP.GetDir(_CurrentPath, LBracket, RBracket);
-                Cursor.Current = Cursors.Default;
+                passed = true;
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("RefreshFileList() Exception: " + ex.Message);
+            }
+
+            if (!passed)
+            {
+                Application.DoEvents();
+                dir = _ESP.GetDir(_CurrentPath, LBracket, RBracket);
+            }
+
+            Cursor.Current = Cursors.Default;
+
             foreach (string entry in dir)
                 lstDirectory.Items.Add(entry);
 
