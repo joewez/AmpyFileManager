@@ -190,19 +190,17 @@ namespace AmpyFileManager
                     if (nav_path != "")
                         tempstr = entry.Substring(nav_path.Length - 1);
                     else
-                        tempstr = entry;
+                        tempstr = entry.Substring(1);
                     filename = tempstr.Substring(0, tempstr.IndexOf(" - "));
                     size = tempstr.Substring(tempstr.IndexOf(" - ") + 3);
 
+                    if (filename.StartsWith("/"))
+                        filename = filename.Substring(1);
+
                     if (size.StartsWith("0 bytes"))
-                    {
-                        if (filename.Contains("."))
-                            files.Add(filename.Substring(1));
-                        else
-                            folders.Add(filename.Substring(1));
-                    }
+                        folders.Add(filename);
                     else
-                        files.Add(filename.Substring(1));
+                        files.Add(filename);
                 }
 
             foreach (string folder in folders.OrderBy(f => f).ToList())
@@ -212,6 +210,6 @@ namespace AmpyFileManager
 
             return dir;
         }
-
+        
     }
 }
