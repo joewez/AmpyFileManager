@@ -31,6 +31,10 @@ namespace AmpyFileManager
         private int _bufferLimit = 16384;
         private int _bufferResetSize = 2048;
 
+        private bool _externalTerminal = true;
+        private string _terminalApp = "putty";
+        private string _terminalAppArgs = "-load \"repl\" -serial ";
+
         private ESPRoutines _ESP;   // Wrapper for AMPY invocations
 
         public Manager(ESPRoutines ESP)
@@ -44,6 +48,16 @@ namespace AmpyFileManager
         private void Manager_Load(object sender, EventArgs e)
         {
             this.Text = "Ampy File Manager (" + _ESP.COMM_PORT + ")";
+
+            _externalTerminal = (ConfigurationManager.AppSettings["ExternalTerminal"] == "Y");
+            if (_externalTerminal)
+            {
+                _terminalApp = ConfigurationManager.AppSettings["TerminalApp"];
+                _terminalAppArgs = ConfigurationManager.AppSettings["TerminalAppArgs"];
+                splitContainer2.Panel2.Visible = false;
+                splitContainer2.SplitterDistance = splitContainer2.Height;
+                btnRun.Visible = false;
+            }
 
             // Get the dir where we save things
             string saveDir = ConfigurationManager.AppSettings["SaveDir"];
@@ -122,7 +136,7 @@ namespace AmpyFileManager
             {
                 string oldFilename = _CurrentFile;
                 _CurrentFile = NEW_FILENAME;
-                bool saved = DoSave();
+                bool saved = DoSave(oldFilename);
                 if (saved)
                 {
                     lblCurrentFile.Text = GetFileOnly(_CurrentFile);
@@ -188,6 +202,34 @@ namespace AmpyFileManager
                 _ESP.PutFile(newFile, FileToAdd);
                 Cursor.Current = Cursors.Default;
                 RefreshFileList();
+            }
+        }
+
+        private void btnMove_Click(object sender, EventArgs e)
+        {
+            string FileToDelete = "";
+            string selectedItem = lstDirectory.Text;
+            if (selectedItem != "")
+            {
+                if (!selectedItem.StartsWith(LBracket))
+                {
+                    FileToDelete = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
+                }
+            }
+
+            string filename = Microsoft.VisualBasic.Interaction.InputBox("New Path and Filename:", "Move File", "");
+            if (filename != "")
+            {
+                if (filename.IndexOf(".") > 0)
+                {
+                    CloseComm();
+                    Cursor.Current = Cursors.WaitCursor;
+                    _ESP.MoveFile(FileToDelete, filename);
+                    Cursor.Current = Cursors.Default;
+                    RefreshFileList();
+                }
+                else
+                    MessageBox.Show("Filename must have an extension.");
             }
         }
 
@@ -285,8 +327,21 @@ namespace AmpyFileManager
                 RefreshFileList();
             else
             {
-                OpenComm();
-                txtTerminal.Focus();
+                if (!_externalTerminal)
+                {
+                    OpenComm();
+                    txtTerminal.Focus();
+                }
+                else
+                {
+                    Process p = new Process();
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    p.StartInfo.FileName = _terminalApp;
+                    p.StartInfo.Arguments = _terminalAppArgs + _ESP.COMM_PORT;
+                    p.Start();
+                    p.WaitForExit();
+                }
             }
         }
 
@@ -507,13 +562,18 @@ namespace AmpyFileManager
             return result;
         }
 
-        private bool DoSave()
+        private bool DoSave(string prefill = "")
         {
             bool result = false;
 
             if (_CurrentFile == NEW_FILENAME)
             {
-                string filename = Microsoft.VisualBasic.Interaction.InputBox("New Filename:", "Save File", "");
+                string justfile = prefill;
+                if ((prefill.IndexOf('/') >= 0) && (prefill.LastIndexOf('/') < prefill.Length - 1))
+                {
+                    justfile = prefill.Substring(prefill.LastIndexOf('/') + 1);
+                }
+                string filename = Microsoft.VisualBasic.Interaction.InputBox("New Filename:", "Save File", justfile);
                 if (filename != "")
                 {
                     if (filename.IndexOf(".") > 0)
@@ -802,7 +862,7 @@ namespace AmpyFileManager
                     Application.DoEvents();
 
                 picCommStatus.BackColor = Color.Red;
-                btnChangeMode.Text = "Console Mode";
+                btnChangeMode.Text = "Console";
                 btnChangeMode.ForeColor = Color.Red;
             }
         }
@@ -936,6 +996,7 @@ namespace AmpyFileManager
             btnBackup.Enabled = false;
             btnOpen.Enabled = false;
             btnNew.Enabled = false;
+            btnMove.Enabled = false;
             btnDelete.Enabled = false;
             btnLoad.Enabled = false;
             btnSave.Enabled = false;
@@ -954,6 +1015,7 @@ namespace AmpyFileManager
             btnBackup.Enabled = true;
             btnOpen.Enabled = true;
             btnNew.Enabled = true;
+            btnMove.Enabled = true;
             btnDelete.Enabled = true;
             btnLoad.Enabled = true;
             btnSave.Enabled = true;

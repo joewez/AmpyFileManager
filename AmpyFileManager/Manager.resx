@@ -118,6 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnMove.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAO1SURBVEhLrVRtaJVlGL7u5+P9WjkrZ1YbJYEz7dM+Ns1yruMnaGxINjXXbInOmtGXIaIWmGFB
+        hoYhc2cr65SxsX8OIfoVVMwwaacPqh9hhMYW4azI3vN2vWdvjW0GHbcLbs577ud57vu5r/u6HxSCOq0n
+        1Vutk7/ji7XWrHgz8MPVRret1NpP3OODWqMrDxYFv6WZ4D3PjRYq9dL9SplkeWxotvb6/YF/prUoyMWW
+        8bxcp+OEs4BNS7UaG111Rhfv8b1v0gzcYO3xtiDINVvTm3Hs711G/3EdsCzZenEgNXPaAz+qcUx3uVKP
+        sQdRjdadt/D23UaHtUq1lQNesr1wVBsVd3M2P6dXa73ksJ9P0FECFDNqBf0zq0QKp6lKqSD5/BcrjU1l
+        fC+q1arjRqAoceexEZAlwKgzo9BgjL/FdTqpmIGpAsYZwgNWp96nglao0Ql2iez5BPj1Nt7jSUAl7uFo
+        sqbkedf7lA2NnvHcr+m6Y3BlEKxqVpfr5BZoaSHvw247D7KqF/jzW+D8YpGnHweGS/hRY8pf8b3vYxk2
+        OvYzAZZfC0yqFAkqaLcCzj0K//Rjxn3k/V7An8dEKRoTFt8ENJ4QDJwBoo0i+zZzPR98gzUTDgR+X2vg
+        5w4Naj1sD4LwLQ7VO74XHvG88LDr9F/DwPkDxLMiu0jJX8eB8CTtK9p3/P8Df38GcgNM8ojI3oa4kmql
+        /B2u0/M2g9FyOz3n1BbrfPmc42S3Oja7zepss9Efs6pYNXlUCR7eK/LFfpHsAdpBWgvQe1LkXD8TMMn5
+        OcDuuMr8ganAVZutPdZJjl9z7E+XAzVXAmU3A6XUfOkNwJQZkMk7lbTOFpm7iDcjbSV3co1ZS0lnGWl5
+        g4FD9uEcRfACh7DsRaornyBGKTBhtVLpo8ZEGWP6eYjUDmGdUtWkJKoXZG4fMVysZnsf10hb39V8XRic
+        97sAFmrx2MAd25RirCFKYjQpSX3OIOsEHZUjZLpcZP3rIj101rFXExP3hcHDejrLXyTiJq48nhBJZZmg
+        kQnuHpFgMc+QxskFPxubRK7YLXJoPqt5UGQBlRKtZwLKacqr5HwpX5Nk68VhjUgFJRh9AJyeL/IUZRht
+        EHSlRT6MOV8rkp42lsduFUt/SOTlOHCPyNkfKcETlCKD51ooTW6ZW/VfT8P/BSfS3S5yhBOaO02Lg3eL
+        nGLUZWu4lmwbG+KnoF3ko7PUOZX0y6VAPWV8SbI8PpjJUdkKvMt5aWLwyxL3+IKT695VEC3A30lf9nwL
+        j7QTAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="btnRun.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAACH

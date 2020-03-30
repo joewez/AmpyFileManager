@@ -72,6 +72,7 @@
             this.btnControlC = new System.Windows.Forms.Button();
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
             this.tmrRunCommand = new System.Windows.Forms.Timer(this.components);
+            this.btnMove = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -96,6 +97,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.btnMove);
             this.panel1.Controls.Add(this.btnRun);
             this.panel1.Controls.Add(this.btnBackup);
             this.panel1.Controls.Add(this.btnRefresh);
@@ -115,7 +117,7 @@
             // 
             this.btnRun.Image = ((System.Drawing.Image)(resources.GetObject("btnRun.Image")));
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRun.Location = new System.Drawing.Point(401, 7);
+            this.btnRun.Location = new System.Drawing.Point(469, 7);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(51, 30);
             this.btnRun.TabIndex = 6;
@@ -128,11 +130,11 @@
             // 
             this.btnBackup.Image = ((System.Drawing.Image)(resources.GetObject("btnBackup.Image")));
             this.btnBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnBackup.Location = new System.Drawing.Point(499, 6);
+            this.btnBackup.Location = new System.Drawing.Point(532, 6);
             this.btnBackup.Name = "btnBackup";
-            this.btnBackup.Size = new System.Drawing.Size(105, 30);
+            this.btnBackup.Size = new System.Drawing.Size(72, 30);
             this.btnBackup.TabIndex = 7;
-            this.btnBackup.Text = "Backup Device";
+            this.btnBackup.Text = "Backup";
             this.btnBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnBackup.UseVisualStyleBackColor = true;
             this.btnBackup.Click += new System.EventHandler(this.btnBackup_Click);
@@ -141,7 +143,7 @@
             // 
             this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(330, 7);
+            this.btnRefresh.Location = new System.Drawing.Point(399, 7);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(67, 30);
             this.btnRefresh.TabIndex = 5;
@@ -157,9 +159,9 @@
             this.panel5.Controls.Add(this.btnLoadHelp);
             this.panel5.Controls.Add(this.btnChangeMode);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(619, 0);
+            this.panel5.Location = new System.Drawing.Point(610, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(412, 41);
+            this.panel5.Size = new System.Drawing.Size(421, 41);
             this.panel5.TabIndex = 7;
             // 
             // label4
@@ -199,8 +201,7 @@
             this.btnChangeMode.Name = "btnChangeMode";
             this.btnChangeMode.Size = new System.Drawing.Size(116, 31);
             this.btnChangeMode.TabIndex = 8;
-            this.btnChangeMode.Text = "Console Mode";
-            this.btnChangeMode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnChangeMode.Text = "Console";
             this.btnChangeMode.UseVisualStyleBackColor = true;
             this.btnChangeMode.Click += new System.EventHandler(this.btnChangeMode_Click);
             // 
@@ -208,7 +209,7 @@
             // 
             this.btnMkdir.Image = ((System.Drawing.Image)(resources.GetObject("btnMkdir.Image")));
             this.btnMkdir.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMkdir.Location = new System.Drawing.Point(259, 7);
+            this.btnMkdir.Location = new System.Drawing.Point(328, 7);
             this.btnMkdir.Name = "btnMkdir";
             this.btnMkdir.Size = new System.Drawing.Size(68, 30);
             this.btnMkdir.TabIndex = 4;
@@ -223,7 +224,7 @@
             this.btnLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLoad.Location = new System.Drawing.Point(129, 7);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(61, 30);
+            this.btnLoad.Size = new System.Drawing.Size(59, 30);
             this.btnLoad.TabIndex = 2;
             this.btnLoad.Text = "Load";
             this.btnLoad.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -247,7 +248,7 @@
             // 
             this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(194, 7);
+            this.btnDelete.Location = new System.Drawing.Point(191, 7);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(62, 30);
             this.btnDelete.TabIndex = 3;
@@ -562,6 +563,19 @@
             this.tmrRunCommand.Interval = 3000;
             this.tmrRunCommand.Tick += new System.EventHandler(this.tmrRunCommand_Tick);
             // 
+            // btnMove
+            // 
+            this.btnMove.Image = ((System.Drawing.Image)(resources.GetObject("btnMove.Image")));
+            this.btnMove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMove.Location = new System.Drawing.Point(256, 7);
+            this.btnMove.Name = "btnMove";
+            this.btnMove.Size = new System.Drawing.Size(69, 30);
+            this.btnMove.TabIndex = 8;
+            this.btnMove.Text = "Move";
+            this.btnMove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnMove.UseVisualStyleBackColor = true;
+            this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -645,5 +659,6 @@
         private System.Windows.Forms.Button btnCustom;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.Button btnMove;
     }
 }

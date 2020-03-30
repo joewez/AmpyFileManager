@@ -83,28 +83,12 @@ namespace AmpyFileManager
             p.WaitForExit();
         }
 
-        public string RunFile(string RunFile)
+        public void MoveFile(string SrcFile, string DestFile)
         {
-            string output = "";
-            string errors = "";
-
-            Process p = new Process();
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.FileName = "ampy";
-            p.StartInfo.Arguments = "-p " + COMM_PORT + " -b " + BAUD_RATE.ToString() + " run " + RunFile;
-            p.Start();
-            output = p.StandardOutput.ReadToEnd();
-            errors = p.StandardError.ReadToEnd();
-            p.WaitForExit();
-
-            if (output == "" && errors != "")
-                return errors.Replace("\r\r", "");
-            else
-                return output.Replace("\r\r", "");
+            string tmpFile = Path.GetTempFileName();
+            GetFile(SrcFile, tmpFile);
+            DeleteFile(SrcFile);
+            PutFile(tmpFile, DestFile);
         }
 
         public void DeleteFile(string DeleteFile)
