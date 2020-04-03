@@ -1,5 +1,3 @@
-<i>November 2019 Note: The application has been updated to support the latest version of the Adafruit AMPY application. (1.07)</i>
-
 # AmpyFileManager
 Windows GUI for the Adafruit MicroPython Utility
 <p align="center">
@@ -30,23 +28,42 @@ HOW TO USE:
 
 All the features are pretty self-explanatory, but here is just a short description of it's general use.
 
-- To open a file for viewing or editing, select the file and click "Open" (or just double-click the filename)
-- To go into a sub-folder select the folder and click "Open" (or just double-click the folder name)
-- "New" will prepare a new file for editing
-- "Load" will allow you to import a file
-- "Delete" will delete the file from the device
-- "MKDIR" will allow you to create a sub-folder
-- "Refresh" will reread the file list of the current directory
-- "Backup Device" will prepare end execute a batch file that will backup the contents of the device
-- "Console/Edit Mode" will toggle between an active console window and an active edit area
+- Navigation
+  - To open a file for viewing or editing, select the file and click "Open" (or just double-click the filename)
+  - To go into a sub-folder select the folder and click "Open" (or just double-click the folder name)
+  - To go back one directory click on the [..] entry at the top of the file list
+- Commands
+  - "New" will prepare a new file for editing
+  - "Open" will open a file for editing or change the directory
+  - "Load" will allow you to import a file from your computer
+  - "Export" will save the selected file to your computer
+  - "Delete" will delete the file from the device
+  - "Move" will move (rename) the selected file
+  - "MKDIR" will allow you to create a sub-folder
+  - "Refresh" will re-read the file list of the current directory
 
 ADDITIONAL INFO:
 
-- The backups are stored in a sub-folder of the directory where the EXE is located.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
+  - if ExternalTerminal is set to "Y" the TerminalApp and TerminalAppArgs settings are used
+    - TerminalApp is the EXE to to run
+    - TerminalAppArgs are the arguments to run the terminal app with
+      - The term {PORT} in the TerminalAppArgs setting will be replaced at runtime with the current port
+    - Example:
+
+        <add key="ExternalTerminal" value="Y"/>
+        <add key="TerminalApp" value="putty"/>
+        <add key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}"/>
+
+        Invokes the putty.exe application and uses the "repl" session
+  - The EditExtensions setting determines what types of files are editable (text)
+  - UniqueSessions indicates if a single session directory is used or a new one for each program start
+    - The "session" directory is where the file being edited is held temporarily
+  - The remaining settings are self-explanatory
 
 CAVEATS:
 
+- This editor is only meant to edit a single file at a time
 - Because of some limitations, in order to use this tool you must follow this guideline...
     - Directories will be recognized by their zero size reported
     - Editable files are recognized by their use of an extension 
@@ -56,4 +73,3 @@ CAVEATS:
     - You may have to "Refresh" or try again to get a feature to work.
     - Sometimes the software will pause until the device is momentarily unplugged
     - This is highly dependent on the type of application that is running
-

@@ -4,6 +4,9 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -33,7 +36,7 @@ namespace AmpyFileManager
 
         private bool _externalTerminal = true;
         private string _terminalApp = "putty";
-        private string _terminalAppArgs = "-load \"repl\" -serial ";
+        private string _terminalAppArgs = "-load \"repl\" -serial {PORT}";
 
         private ESPRoutines _ESP;   // Wrapper for AMPY invocations
 
@@ -56,13 +59,15 @@ namespace AmpyFileManager
                 _terminalAppArgs = ConfigurationManager.AppSettings["TerminalAppArgs"];
                 splitContainer2.Panel2.Visible = false;
                 splitContainer2.SplitterDistance = splitContainer2.Height;
-                btnRun.Visible = false;
             }
 
             // Get the dir where we save things
             string saveDir = ConfigurationManager.AppSettings["SaveDir"];
             if (String.IsNullOrWhiteSpace(saveDir))
                 saveDir = Path.GetDirectoryName(Application.ExecutablePath);
+
+            btnRun.Visible = (ConfigurationManager.AppSettings["ShowRunButton"] == "Y");
+            btnBackup.Visible = (ConfigurationManager.AppSettings["ShowBackupButton"] == "Y");
 
             // directory for all backup files
             _BackupPath = Path.Combine(saveDir, "backups");
@@ -71,10 +76,11 @@ namespace AmpyFileManager
 
             // Where we store our files while they are being edited
             string uniqueSessions = ConfigurationManager.AppSettings["UniqueSessions"];
+            string SessionRoot = Path.Combine(saveDir, "session");
             if (uniqueSessions.Trim().ToUpper().StartsWith("Y"))
-                _SessionPath = Path.Combine(_BackupPath, DateTime.Now.ToString("SyyyyMMdd-HHmm"));
+                _SessionPath = Path.Combine(SessionRoot, DateTime.Now.ToString("SyyyyMMdd-HHmm"));
             else
-                _SessionPath = Path.Combine(saveDir, "session");
+                _SessionPath = SessionRoot;
             if (!Directory.Exists(_SessionPath))
                 Directory.CreateDirectory(_SessionPath);
 
@@ -207,29 +213,34 @@ namespace AmpyFileManager
 
         private void btnMove_Click(object sender, EventArgs e)
         {
-            string FileToDelete = "";
+            string FileToMove = "";
             string selectedItem = lstDirectory.Text;
             if (selectedItem != "")
             {
                 if (!selectedItem.StartsWith(LBracket))
                 {
-                    FileToDelete = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
-                }
-            }
-
-            string filename = Microsoft.VisualBasic.Interaction.InputBox("New Path and Filename:", "Move File", "");
-            if (filename != "")
-            {
-                if (filename.IndexOf(".") > 0)
-                {
-                    CloseComm();
-                    Cursor.Current = Cursors.WaitCursor;
-                    _ESP.MoveFile(FileToDelete, filename);
-                    Cursor.Current = Cursors.Default;
-                    RefreshFileList();
+                    FileToMove = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
                 }
                 else
-                    MessageBox.Show("Filename must have an extension.");
+                    MessageBox.Show("Can only move files.", "Not Supported");
+            }
+
+            if (FileToMove != "")
+            {
+                string filename = Microsoft.VisualBasic.Interaction.InputBox("New Path and Filename:", "Move File", "");
+                if (filename != "")
+                {
+                    if (filename.IndexOf(".") > 0)
+                    {
+                        CloseComm();
+                        Cursor.Current = Cursors.WaitCursor;
+                        _ESP.MoveFile(FileToMove, filename);
+                        Cursor.Current = Cursors.Default;
+                        RefreshFileList();
+                    }
+                    else
+                        MessageBox.Show("Filename must have an extension.");
+                }
             }
         }
 
@@ -338,8 +349,15 @@ namespace AmpyFileManager
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.StartInfo.FileName = _terminalApp;
-                    p.StartInfo.Arguments = _terminalAppArgs + _ESP.COMM_PORT;
+                    p.StartInfo.Arguments = _terminalAppArgs.Replace("{PORT}", _ESP.COMM_PORT);
                     p.Start();
+                    string title = GetCaptionOfActiveWindow();
+                    while (title.Contains("Ampy"))
+                    {
+                        Application.DoEvents();
+                        title = GetCaptionOfActiveWindow();
+                    }
+                    SendKeys.SendWait("{ENTER}");
                     p.WaitForExit();
                 }
             }
@@ -383,9 +401,29 @@ namespace AmpyFileManager
                     if (selectedItem.ToLower().EndsWith(".py"))
                     {
                         _runCommand = "import " + selectedItem.Substring(0, selectedItem.Length - 3);
-                        OpenComm();
-                        txtTerminal.Focus();
-                        tmrRunCommand.Enabled = true;
+                        if (_externalTerminal)
+                        {
+                            Process p = new Process();
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                            p.StartInfo.FileName = _terminalApp;
+                            p.StartInfo.Arguments = _terminalAppArgs.Replace("{PORT}", _ESP.COMM_PORT);
+                            p.Start();
+                            string title = GetCaptionOfActiveWindow();
+                            while (title.Contains("Ampy"))
+                            {
+                                Application.DoEvents();
+                                title = GetCaptionOfActiveWindow();
+                            }
+                            SendKeys.SendWait("{ENTER}" + _runCommand + "{ENTER}");
+                            p.WaitForExit();
+                        }
+                        else
+                        {
+                            OpenComm();
+                            txtTerminal.Focus();
+                            tmrRunCommand.Enabled = true;
+                        }
                     }
                 }
             }
@@ -461,6 +499,33 @@ namespace AmpyFileManager
         private void contextMenuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             serialPort1.Write(Clipboard.GetText());
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            string FileToExport = "";
+            string selectedItem = lstDirectory.Text;
+            if (selectedItem != "")
+            {
+                if (!selectedItem.StartsWith(LBracket))
+                {
+                    FileToExport = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
+                }
+                else
+                    MessageBox.Show("Can only export files.", "Not Supported");
+            }
+
+            if (FileToExport != "")
+            {
+                saveFileDialog1.FileName = selectedItem;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    CloseComm();
+                    Cursor.Current = Cursors.WaitCursor;
+                    _ESP.GetFile(FileToExport, saveFileDialog1.FileName);
+                    Cursor.Current = Cursors.Default;
+                }
+            }
         }
 
         #endregion
@@ -862,7 +927,7 @@ namespace AmpyFileManager
                     Application.DoEvents();
 
                 picCommStatus.BackColor = Color.Red;
-                btnChangeMode.Text = "Console";
+                btnChangeMode.Text = "REPL";
                 btnChangeMode.ForeColor = Color.Red;
             }
         }
@@ -880,7 +945,7 @@ namespace AmpyFileManager
                 _JustOpened = true;
 
                 picCommStatus.BackColor = Color.Green;
-                btnChangeMode.Text = "Edit Mode   ";
+                btnChangeMode.Text = "Editor     ";
                 btnChangeMode.ForeColor = Color.Green;
                 FreezeEditing();
             }
@@ -999,6 +1064,7 @@ namespace AmpyFileManager
             btnMove.Enabled = false;
             btnDelete.Enabled = false;
             btnLoad.Enabled = false;
+            btnExport.Enabled = false;
             btnSave.Enabled = false;
             btnSaveAs.Enabled = false;
             lstDirectory.Enabled = false;
@@ -1018,6 +1084,7 @@ namespace AmpyFileManager
             btnMove.Enabled = true;
             btnDelete.Enabled = true;
             btnLoad.Enabled = true;
+            btnExport.Enabled = true;
             btnSave.Enabled = true;
             btnSaveAs.Enabled = true;
             lstDirectory.Enabled = true;
@@ -1191,7 +1258,30 @@ namespace AmpyFileManager
             // scintilla.SetKeywords(1, "add your own keywords here");
         }
 
-        #endregion
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        private string GetCaptionOfActiveWindow()
+        {
+            var strTitle = string.Empty;
+            var handle = GetForegroundWindow();
+            // Obtain the length of the text   
+            var intLength = GetWindowTextLength(handle) + 1;
+            var stringBuilder = new StringBuilder(intLength);
+            if (GetWindowText(handle, stringBuilder, intLength) > 0)
+            {
+                strTitle = stringBuilder.ToString();
+            }
+            return strTitle;
+        }
+
+        #endregion
     }
 }

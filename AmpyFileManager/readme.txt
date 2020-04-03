@@ -6,7 +6,7 @@ Windows GUI for the Adafruit MicroPython Utility
 A simple GUI wrapper that executes the AMPY command to manipulate the files on an ESP8266 board running 
 MicroPython.
 
-It was written in C# in Visual Studio 2017, so you will need VS Express or better to compile it. It uses
+It was written in C# in Visual Studio 2019, so you will need VS Express or better to compile it. It uses
 the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET), which allows for Python3 
 syntax highlighting.
 
@@ -40,16 +40,20 @@ All the features are pretty self-explanatory, but here is just a short descripti
 - "New" will prepare a new file for editing
 - "Load" will allow you to import a file
 - "Delete" will delete the file from the device
+- "Move" will allow you to move (or rename) a file
 - "MKDIR" will allow you to create a sub-folder
 - "Refresh" will reread the file list of the current directory
-- "Run" will attempt to execute the select python script
-- "Backup Device" will prepare end execute a batch file that will backup the contents of the device
-- "Console/Edit Mode" will toggle between an active console window and an active edit area
+- "REPL" will open a serial terminal application
 
 ADDITIONAL INFO:
 
-- The backups are stored in a sub-folder of the directory where the EXE is located.
+- The backups (by default) are stored in a sub-folder of the directory where the EXE is located.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
+
+CONFIG SETTINGS NOTES:
+
+- 
+
 
 CAVEATS:
 
