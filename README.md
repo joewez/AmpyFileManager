@@ -45,19 +45,21 @@ All the features are pretty self-explanatory, but here is just a short descripti
 ADDITIONAL INFO:
 
 - Configuration setting are located in the AmpyFilemanager.exe.config file
-  - if ExternalTerminal is set to "Y" the TerminalApp and TerminalAppArgs settings are used
-    - TerminalApp is the EXE to to run
-    - TerminalAppArgs are the arguments to run the terminal app with
-      - The term {PORT} in the TerminalAppArgs setting will be replaced at runtime with the current port
+  - if <b>ExternalTerminal</b> is set to "Y" the <b>TerminalApp</b> and <b>TerminalAppArgs</b> settings are used
+    - <b>TerminalApp</b> is the EXE to to run
+    - <b>TerminalAppArgs</b> are the arguments to run the terminal app with
+      - The term {PORT} in the <b>TerminalAppArgs</b> setting will be replaced at runtime with the current port
     - Example:
 
-        key="ExternalTerminal" value="Y"
-        key="TerminalApp" value="putty"
-        key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}"
-
+        <p>
+        &lt;add key="ExternalTerminal" value="Y" /&gt;<br />
+        &lt;add key="TerminalApp" value="putty" /&gt;<br />
+        &lt;add key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}" /&gt;<br />
+        </p>
+        
         Invokes the putty.exe application and uses the "repl" session
-  - The EditExtensions setting determines what types of files are editable (text)
-  - UniqueSessions indicates if a single session directory is used or a new one for each program start
+  - The <b>EditExtensions</b> setting determines what types of files are editable (text)
+  - <b>UniqueSessions</b> indicates if a single session directory is used or a new one for each program start
     - The "session" directory is where the file being edited is held temporarily
   - The remaining settings are self-explanatory
 
