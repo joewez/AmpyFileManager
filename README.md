@@ -51,9 +51,9 @@ ADDITIONAL INFO:
       - The term {PORT} in the TerminalAppArgs setting will be replaced at runtime with the current port
     - Example:
 
-        <add key="ExternalTerminal" value="Y"/>
-        <add key="TerminalApp" value="putty"/>
-        <add key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}"/>
+        key="ExternalTerminal" value="Y"
+        key="TerminalApp" value="putty"
+        key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}"
 
         Invokes the putty.exe application and uses the "repl" session
   - The EditExtensions setting determines what types of files are editable (text)
