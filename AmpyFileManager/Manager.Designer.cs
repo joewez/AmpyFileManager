@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Manager));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnExport = new System.Windows.Forms.Button();
             this.btnMove = new System.Windows.Forms.Button();
             this.btnRun = new System.Windows.Forms.Button();
             this.btnBackup = new System.Windows.Forms.Button();
@@ -73,7 +74,8 @@
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
             this.tmrRunCommand = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.btnExport = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -114,6 +116,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1173, 45);
             this.panel1.TabIndex = 0;
+            // 
+            // btnExport
+            // 
+            this.btnExport.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.Image")));
+            this.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExport.Location = new System.Drawing.Point(191, 7);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(67, 30);
+            this.btnExport.TabIndex = 3;
+            this.btnExport.Text = "Export";
+            this.btnExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnMove
             // 
@@ -169,34 +184,37 @@
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.label3);
             this.panel5.Controls.Add(this.cboHelp);
             this.panel5.Controls.Add(this.btnLoadHelp);
             this.panel5.Controls.Add(this.btnChangeMode);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(748, 0);
+            this.panel5.Location = new System.Drawing.Point(720, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(421, 41);
+            this.panel5.Size = new System.Drawing.Size(449, 41);
             this.panel5.TabIndex = 7;
             // 
             // cboHelp
             // 
             this.cboHelp.FormattingEnabled = true;
-            this.cboHelp.Location = new System.Drawing.Point(12, 10);
+            this.cboHelp.Location = new System.Drawing.Point(142, 11);
             this.cboHelp.Name = "cboHelp";
             this.cboHelp.Size = new System.Drawing.Size(169, 21);
             this.cboHelp.TabIndex = 10;
+            this.cboHelp.SelectedIndexChanged += new System.EventHandler(this.cboHelp_SelectedIndexChanged);
             // 
             // btnLoadHelp
             // 
             this.btnLoadHelp.Image = ((System.Drawing.Image)(resources.GetObject("btnLoadHelp.Image")));
             this.btnLoadHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLoadHelp.Location = new System.Drawing.Point(187, 5);
+            this.btnLoadHelp.Location = new System.Drawing.Point(3, 5);
             this.btnLoadHelp.Name = "btnLoadHelp";
             this.btnLoadHelp.Size = new System.Drawing.Size(72, 31);
             this.btnLoadHelp.TabIndex = 11;
             this.btnLoadHelp.Text = "View...";
             this.btnLoadHelp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnLoadHelp.UseVisualStyleBackColor = true;
+            this.btnLoadHelp.Visible = false;
             this.btnLoadHelp.Click += new System.EventHandler(this.btnLoadHelp_Click);
             // 
             // btnChangeMode
@@ -205,7 +223,7 @@
             this.btnChangeMode.ForeColor = System.Drawing.Color.Red;
             this.btnChangeMode.Image = ((System.Drawing.Image)(resources.GetObject("btnChangeMode.Image")));
             this.btnChangeMode.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnChangeMode.Location = new System.Drawing.Point(295, 5);
+            this.btnChangeMode.Location = new System.Drawing.Point(327, 5);
             this.btnChangeMode.Name = "btnChangeMode";
             this.btnChangeMode.Size = new System.Drawing.Size(116, 31);
             this.btnChangeMode.TabIndex = 12;
@@ -308,7 +326,7 @@
             // 
             // lstDirectory
             // 
-            this.lstDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(225)))), ((int)(((byte)(174)))));
+            this.lstDirectory.BackColor = System.Drawing.Color.Moccasin;
             this.lstDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDirectory.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstDirectory.FormattingEnabled = true;
@@ -575,18 +593,14 @@
             // 
             this.saveFileDialog1.Title = "Export File";
             // 
-            // btnExport
+            // label3
             // 
-            this.btnExport.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.Image")));
-            this.btnExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnExport.Location = new System.Drawing.Point(191, 7);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(67, 30);
-            this.btnExport.TabIndex = 3;
-            this.btnExport.Text = "Export";
-            this.btnExport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(109, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Help:";
             // 
             // Manager
             // 
@@ -602,6 +616,7 @@
             this.Load += new System.EventHandler(this.Manager_Load);
             this.panel1.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -672,5 +687,7 @@
         private System.Windows.Forms.Button btnMove;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -198,7 +198,7 @@ namespace AmpyFileManager
                         if (filename.StartsWith("/"))
                             filename = filename.Substring(1);
 
-                        if (size.StartsWith("0 bytes"))
+                        if (filename.IndexOf(".") == -1 && (size.StartsWith("0 bytes") || size.StartsWith("10 bytes")))
                             folders.Add(filename);
                         else
                             files.Add(filename);

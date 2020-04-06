@@ -87,6 +87,22 @@ namespace AmpyFileManager
             // load help links
             LoadHelpDropdown();
 
+            // Setup tooltips
+            toolTip1.SetToolTip(btnBackup, "Make a local backup of all the files on the device");
+            toolTip1.SetToolTip(btnChangeMode, "Go to the MicroPython REPL");
+            toolTip1.SetToolTip(btnDelete, "Delete the selected file or directory permanently from the device");
+            toolTip1.SetToolTip(btnExport, "Export the selected file from the device to your computer");
+            toolTip1.SetToolTip(btnLoad, "Import an external file to the device");
+            toolTip1.SetToolTip(btnMkdir, "Make a sub-directory under the current directory");
+            toolTip1.SetToolTip(btnMove, "Move (rename) the selected file");
+            toolTip1.SetToolTip(btnNew, "Create a new file");
+            toolTip1.SetToolTip(btnOpen, "Open the selected file for editing or directory for viewing");
+            toolTip1.SetToolTip(btnRefresh, "Re-read the file list for the current directory");
+            toolTip1.SetToolTip(btnRun, "Run the currently selected file");
+            toolTip1.SetToolTip(btnSave, "Save the current file");
+            toolTip1.SetToolTip(btnSaveAs, "Save the current file to the current directory with the specified name");
+            toolTip1.SetToolTip(cboHelp, "Help Links");
+
             // if specified use the baud rate in the config
             string BaudRate = ConfigurationManager.AppSettings["BaudRate"];
             if (!String.IsNullOrEmpty(BaudRate))
@@ -365,24 +381,7 @@ namespace AmpyFileManager
 
         private void btnLoadHelp_Click(object sender, EventArgs e)
         {
-            int current = cboHelp.SelectedIndex;
-            if (current >= 0)
-            {
-                string link = ConfigurationManager.AppSettings["HelpLink" + (current + 1).ToString()];
-                if (!link.ToLower().StartsWith("http"))
-                {
-                    if (link.Contains("\\"))
-                        link = "file:///" + link;
-                    else
-                    {
-                        link = "file:///" + Directory.GetCurrentDirectory() + "\\" + link;
-                    }
-                }
-                Help help = new Help();
-                help.Text = ConfigurationManager.AppSettings["HelpTitle" + (current + 1).ToString()];
-                ((WebBrowser)help.Controls["webBrowser1"]).Url = new Uri(link);
-                help.Show();
-            }
+            LoadHelp();
         }
 
         private void txtTerminal_Enter(object sender, EventArgs e)
@@ -528,9 +527,36 @@ namespace AmpyFileManager
             }
         }
 
+        private void cboHelp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadHelp();
+        }
+
         #endregion
 
         #region Private Helper Routines
+
+        private void LoadHelp()
+        {
+            int current = cboHelp.SelectedIndex;
+            if (current >= 0)
+            {
+                string link = ConfigurationManager.AppSettings["HelpLink" + (current + 1).ToString()];
+                if (!link.ToLower().StartsWith("http"))
+                {
+                    if (link.Contains("\\"))
+                        link = "file:///" + link;
+                    else
+                    {
+                        link = "file:///" + Directory.GetCurrentDirectory() + "\\" + link;
+                    }
+                }
+                Help help = new Help();
+                help.Text = ConfigurationManager.AppSettings["HelpTitle" + (current + 1).ToString()];
+                ((WebBrowser)help.Controls["webBrowser1"]).Url = new Uri(link);
+                help.Show();
+            }
+        }
 
         private void InvokeControlC()
         {
