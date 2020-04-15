@@ -124,7 +124,9 @@ namespace AmpyFileManager
             }
             else
                 lstDirectory.BackColor = Color.FromName(bcolor);
+
             txtTerminal.Font = new Font(ConfigurationManager.AppSettings["TerminalFont"], Convert.ToSingle(ConfigurationManager.AppSettings["TerminalFontSize"]), FontStyle.Regular);
+            lstDirectory.Font = new Font(ConfigurationManager.AppSettings["DirectoryFont"], Convert.ToSingle(ConfigurationManager.AppSettings["DirectoryFontSize"]), FontStyle.Regular);
 
             ConfigureForPython(scintilla1);
 
@@ -548,7 +550,7 @@ namespace AmpyFileManager
                         link = "file:///" + link;
                     else
                     {
-                        link = "file:///" + Directory.GetCurrentDirectory() + "\\" + link;
+                        link = "file:///" + Path.Combine(Directory.GetCurrentDirectory(), "help") + "\\" + link;
                     }
                 }
                 Help help = new Help();

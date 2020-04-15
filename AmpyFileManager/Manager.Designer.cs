@@ -37,6 +37,7 @@
             this.btnBackup = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.cboHelp = new System.Windows.Forms.ComboBox();
             this.btnLoadHelp = new System.Windows.Forms.Button();
             this.btnChangeMode = new System.Windows.Forms.Button();
@@ -74,7 +75,6 @@
             this.tmrCommStatus = new System.Windows.Forms.Timer(this.components);
             this.tmrRunCommand = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.label3 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -193,6 +193,15 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(449, 41);
             this.panel5.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(109, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Help:";
             // 
             // cboHelp
             // 
@@ -328,10 +337,10 @@
             // 
             this.lstDirectory.BackColor = System.Drawing.Color.Moccasin;
             this.lstDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstDirectory.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstDirectory.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstDirectory.FormattingEnabled = true;
             this.lstDirectory.IntegralHeight = false;
-            this.lstDirectory.ItemHeight = 23;
+            this.lstDirectory.ItemHeight = 22;
             this.lstDirectory.Location = new System.Drawing.Point(0, 33);
             this.lstDirectory.Name = "lstDirectory";
             this.lstDirectory.Size = new System.Drawing.Size(257, 434);
@@ -592,15 +601,6 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.Title = "Export File";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(109, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(32, 13);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Help:";
             // 
             // Manager
             // 

@@ -6,9 +6,9 @@ Windows GUI for the Adafruit MicroPython Utility
 
 A simple GUI wrapper that executes the AMPY command to manipulate the files on an ESP8266 board running MicroPython.
 
-It was written in C# in Visual Studio 2017, so you will need VS Express or better to compile it.  It's only external dependency (besides Python and Ampy) is the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET), which allows for Python3 syntax highlighting.
+It was written in C# in Visual Studio 2019, so you will need VS Express or better to compile it.  It's only external dependency (besides Python and Ampy) is the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET), which allows for Python3 syntax highlighting.
 
-As a development tool, I wrote the utility to mainly just edit the files directly off of the device.  I have also embedded a simple terminal emulator to send commands to the serial REPL.
+As a development tool, I wrote the utility to mainly just edit the files directly off of the device.  I have also embedded a simple terminal emulator to send commands to the serial REPL.  The program works better though when paired with an external terminal such as puTTY or TeraTerm.  See the configuration notes below on how to set this up.
 
 A precompiled binary is available for download here:
 
@@ -67,11 +67,12 @@ CAVEATS:
 
 - This editor is only meant to edit a single file at a time
 - Because of some limitations, in order to use this tool you must follow this guideline...
-    - Directories will be recognized by their zero size reported
+    - Directories will be recognized by their lack of an extension
     - Editable files are recognized by their use of an extension 
-- Although it should work with any device that AMPY works with, it has only been tested with a Wemos D1 Mini and a Witty Cloud Board
+- Although it should work with any device that AMPY works with, it has only been tested with a Wemos D1 Mini, a Witty Cloud Board and a NodeMCU Board. (Primarily ESP8266 Boards)
 - This is mainly for text files (binary files will upload to the device but will not download correctly)
-- Switching between the console and the editor (and back) is a little rough.  
+- Switching between the REPL and the editor (and back) is a little rough... especially with the limited built-in serial terminal.  
     - You may have to "Refresh" or try again to get a feature to work.
     - Sometimes the software will pause until the device is momentarily unplugged
     - This is highly dependent on the type of application that is running
+	- It is recommended yo use an external application (such as putty or TeraTerm) for the REPL
