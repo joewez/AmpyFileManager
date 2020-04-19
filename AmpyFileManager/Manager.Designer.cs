@@ -56,6 +56,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblCurrentFile = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.btnReplaceAll = new System.Windows.Forms.Button();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.panel9 = new System.Windows.Forms.Panel();
@@ -408,24 +409,35 @@
             this.lblCurrentFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentFile.Location = new System.Drawing.Point(77, 0);
             this.lblCurrentFile.Name = "lblCurrentFile";
-            this.lblCurrentFile.Size = new System.Drawing.Size(682, 29);
+            this.lblCurrentFile.Size = new System.Drawing.Size(610, 29);
             this.lblCurrentFile.TabIndex = 8;
             this.lblCurrentFile.Text = "label2";
             this.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel10
             // 
+            this.panel10.Controls.Add(this.btnReplaceAll);
             this.panel10.Controls.Add(this.btnSaveAs);
             this.panel10.Controls.Add(this.btnSave);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel10.Location = new System.Drawing.Point(759, 0);
+            this.panel10.Location = new System.Drawing.Point(687, 0);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(149, 29);
+            this.panel10.Size = new System.Drawing.Size(221, 29);
             this.panel10.TabIndex = 7;
+            // 
+            // btnReplaceAll
+            // 
+            this.btnReplaceAll.Location = new System.Drawing.Point(9, 4);
+            this.btnReplaceAll.Name = "btnReplaceAll";
+            this.btnReplaceAll.Size = new System.Drawing.Size(72, 22);
+            this.btnReplaceAll.TabIndex = 17;
+            this.btnReplaceAll.Text = "Replace All";
+            this.btnReplaceAll.UseVisualStyleBackColor = true;
+            this.btnReplaceAll.Click += new System.EventHandler(this.btnReplaceAll_Click);
             // 
             // btnSaveAs
             // 
-            this.btnSaveAs.Location = new System.Drawing.Point(6, 4);
+            this.btnSaveAs.Location = new System.Drawing.Point(84, 4);
             this.btnSaveAs.Name = "btnSaveAs";
             this.btnSaveAs.Size = new System.Drawing.Size(75, 22);
             this.btnSaveAs.TabIndex = 15;
@@ -435,7 +447,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(87, 4);
+            this.btnSave.Location = new System.Drawing.Point(162, 4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(53, 22);
             this.btnSave.TabIndex = 16;
@@ -689,5 +701,6 @@
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnReplaceAll;
     }
 }

@@ -101,14 +101,8 @@ namespace AmpyFileManager
             toolTip1.SetToolTip(btnRun, "Run the currently selected file");
             toolTip1.SetToolTip(btnSave, "Save the current file");
             toolTip1.SetToolTip(btnSaveAs, "Save the current file to the current directory with the specified name");
+            toolTip1.SetToolTip(btnReplaceAll, "Simple search-and-replace for current file");
             toolTip1.SetToolTip(cboHelp, "Help Links");
-
-            // if specified use the baud rate in the config
-            string BaudRate = ConfigurationManager.AppSettings["BaudRate"];
-            if (!String.IsNullOrEmpty(BaudRate))
-            {
-                serialPort1.BaudRate = Convert.ToInt32(BaudRate);
-            }
 
             // these are the file that can be opened and edited
             _EditableExtensions = ConfigurationManager.AppSettings["EditExtensions"];
@@ -191,7 +185,6 @@ namespace AmpyFileManager
                         string FullDirToDelete = (_CurrentPath == "") ? DirToDelete : _CurrentPath + "/" + DirToDelete;
                         if (MessageBox.Show("Are you sure you want to delete the directory '" + FullDirToDelete + "' and all of it's contents?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                         {
-                            CloseComm();
                             Cursor.Current = Cursors.WaitCursor;
                             _ESP.DeleteDir(FullDirToDelete);
                             Cursor.Current = Cursors.Default;
@@ -204,7 +197,6 @@ namespace AmpyFileManager
                     string FileToDelete = (_CurrentPath == "") ? selectedItem : _CurrentPath + "/" + selectedItem;
                     if (MessageBox.Show("Are you sure you want to delete '" + FileToDelete + "'?", "Confirm Delete", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
-                        CloseComm();
                         Cursor.Current = Cursors.WaitCursor;
                         _ESP.DeleteFile(FileToDelete);
                         Cursor.Current = Cursors.Default;
@@ -221,7 +213,6 @@ namespace AmpyFileManager
                 string newFile = openFileDialog1.FileName;
                 string newFilename = Path.GetFileName(newFile);
                 string FileToAdd = (_CurrentPath == "") ? newFilename : _CurrentPath + "/" + newFilename;
-                CloseComm();
                 Cursor.Current = Cursors.WaitCursor;
                 _ESP.PutFile(newFile, FileToAdd);
                 Cursor.Current = Cursors.Default;
@@ -250,7 +241,6 @@ namespace AmpyFileManager
                 {
                     if (filename.IndexOf(".") > 0)
                     {
-                        CloseComm();
                         Cursor.Current = Cursors.WaitCursor;
                         _ESP.MoveFile(FileToMove, filename);
                         Cursor.Current = Cursors.Default;
@@ -270,7 +260,6 @@ namespace AmpyFileManager
                 if (!newdir.Contains("."))
                 {
                     string newdirfull = (_CurrentPath == "") ? newdir : _CurrentPath + "/" + newdir;
-                    CloseComm();
                     Cursor.Current = Cursors.WaitCursor;
                     _ESP.CreateDir(newdirfull);
                     Cursor.Current = Cursors.Default;
@@ -367,15 +356,15 @@ namespace AmpyFileManager
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.StartInfo.FileName = _terminalApp;
-                    p.StartInfo.Arguments = _terminalAppArgs.Replace("{PORT}", _ESP.COMM_PORT);
+                    p.StartInfo.Arguments = _terminalAppArgs.Replace("{PORT}", _ESP.COMM_PORT).Replace("{PORTNUM}", Convert.ToInt16(_ESP.COMM_PORT.Replace("COM", "")).ToString());
                     p.Start();
-                    string title = GetCaptionOfActiveWindow();
-                    while (title.Contains("Ampy"))
-                    {
-                        Application.DoEvents();
-                        title = GetCaptionOfActiveWindow();
-                    }
-                    SendKeys.SendWait("{ENTER}");
+                    //string title = GetCaptionOfActiveWindow();
+                    //while (title.Contains("Ampy"))
+                    //{
+                    //    Application.DoEvents();
+                    //    title = GetCaptionOfActiveWindow();
+                    //}
+                    //SendKeys.SendWait("{ENTER}");
                     p.WaitForExit();
                 }
             }
@@ -534,9 +523,33 @@ namespace AmpyFileManager
             LoadHelp();
         }
 
+        private void btnReplaceAll_Click(object sender, EventArgs e)
+        {
+            ReplaceAllForm replaceAll = new ReplaceAllForm();
+            if (replaceAll.ShowDialog() == DialogResult.OK)
+            {
+                string FindText = Decode(((TextBox)replaceAll.Controls["txtFind"]).Text);
+                string ReplaceText = Decode(((TextBox)replaceAll.Controls["txtReplace"]).Text);
+
+                if (FindText != "")
+                    scintilla1.Text = scintilla1.Text.Replace(FindText, ReplaceText);
+            }
+        }
+
         #endregion
 
         #region Private Helper Routines
+
+        private string Decode(string codedString)
+        {
+            string result = codedString;
+
+            result = result.Replace("\\n", "\n");
+            result = result.Replace("\\r", "\r");
+            result = result.Replace("\\t", "\t");
+
+            return result;
+        }
 
         private void LoadHelp()
         {
@@ -553,7 +566,7 @@ namespace AmpyFileManager
                         link = "file:///" + Path.Combine(Directory.GetCurrentDirectory(), "help") + "\\" + link;
                     }
                 }
-                Help help = new Help();
+                HelpForm help = new HelpForm();
                 help.Text = ConfigurationManager.AppSettings["HelpTitle" + (current + 1).ToString()];
                 ((WebBrowser)help.Controls["webBrowser1"]).Url = new Uri(link);
                 help.Show();
@@ -564,12 +577,12 @@ namespace AmpyFileManager
         {
             try
             {
-                if (!serialPort1.IsOpen)
-                {
-                    serialPort1.PortName = _ESP.COMM_PORT;
-                    serialPort1.NewLine = CR;
-                    serialPort1.Open();
-                }
+                //if (!serialPort1.IsOpen)
+                //{
+                //    serialPort1.PortName = _ESP.COMM_PORT;
+                //    serialPort1.NewLine = CR;
+                //    serialPort1.Open();
+                //}
 
                 if (serialPort1.IsOpen)
                 {
@@ -587,12 +600,12 @@ namespace AmpyFileManager
         {
             try
             {
-                if (!serialPort1.IsOpen)
-                {
-                    serialPort1.PortName = _ESP.COMM_PORT;
-                    serialPort1.NewLine = CR;
-                    serialPort1.Open();
-                }
+                //if (!serialPort1.IsOpen)
+                //{
+                //    serialPort1.PortName = _ESP.COMM_PORT;
+                //    serialPort1.NewLine = CR;
+                //    serialPort1.Open();
+                //}
 
                 if (serialPort1.IsOpen)
                 {
@@ -964,18 +977,28 @@ namespace AmpyFileManager
         {
             if (!serialPort1.IsOpen)
             {
-                serialPort1.PortName = _ESP.COMM_PORT;
-                serialPort1.NewLine = CR;
-                serialPort1.Open();                
-                while (!serialPort1.IsOpen)
-                    Application.DoEvents();
+                try
+                {
+                    serialPort1.PortName = _ESP.COMM_PORT;
+                    serialPort1.NewLine = CR;
+                    serialPort1.Open();
+                    while (!serialPort1.IsOpen)
+                        Application.DoEvents();
 
-                _JustOpened = true;
+                    if (serialPort1.IsOpen)
+                    {
+                        _JustOpened = true;
 
-                picCommStatus.BackColor = Color.Green;
-                btnChangeMode.Text = "Editor     ";
-                btnChangeMode.ForeColor = Color.Green;
-                FreezeEditing();
+                        picCommStatus.BackColor = Color.Green;
+                        btnChangeMode.Text = "Editor     ";
+                        btnChangeMode.ForeColor = Color.Green;
+                        FreezeEditing();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -1095,6 +1118,7 @@ namespace AmpyFileManager
             btnExport.Enabled = false;
             btnSave.Enabled = false;
             btnSaveAs.Enabled = false;
+            btnReplaceAll.Enabled = false;
             lstDirectory.Enabled = false;
             scintilla1.ReadOnly = true;
             //cboHelp.Enabled = false;
@@ -1115,6 +1139,7 @@ namespace AmpyFileManager
             btnExport.Enabled = true;
             btnSave.Enabled = true;
             btnSaveAs.Enabled = true;
+            btnReplaceAll.Enabled = true;
             lstDirectory.Enabled = true;
             scintilla1.ReadOnly = false;
             //cboHelp.Enabled = true;
@@ -1311,5 +1336,6 @@ namespace AmpyFileManager
         }
 
         #endregion
+
     }
 }

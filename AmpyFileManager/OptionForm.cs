@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace AmpyFileManager
 {
-    public partial class Help : Form
+    public partial class OptionForm : Form
     {
-        public Help()
+        public OptionForm()
         {
             InitializeComponent();
-        }
-
-        private void Help_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

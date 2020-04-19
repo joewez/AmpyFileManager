@@ -6,11 +6,11 @@ using System.Windows.Forms;
 
 namespace AmpyFileManager
 {
-    public partial class SelectCom : Form
+    public partial class SelectComForm : Form
     {
         public string SELECTED_COMM_PORT = "EXIT";
 
-        public SelectCom()
+        public SelectComForm()
         {
             InitializeComponent();
         }

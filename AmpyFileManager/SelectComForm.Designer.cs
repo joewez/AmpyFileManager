@@ -1,6 +1,6 @@
 ﻿namespace AmpyFileManager
 {
-    partial class SelectCom
+    partial class SelectComForm
     {
         /// <summary>
         /// Required designer variable.
@@ -60,7 +60,7 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // SelectCom
+            // SelectComForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -71,7 +71,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "SelectCom";
+            this.Name = "SelectComForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select Comm Port";
             this.Load += new System.EventHandler(this.SelectCom_Load);

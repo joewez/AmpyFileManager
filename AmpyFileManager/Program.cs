@@ -25,7 +25,7 @@ namespace AmpyFileManager
             }
 
             if (ESP.COMM_PORT != "EXIT")
-                Application.Run(new Manager(ESP));
+                Application.Run(new frmMain(ESP));
         }
     }
 }

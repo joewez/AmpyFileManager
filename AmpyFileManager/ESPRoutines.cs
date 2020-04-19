@@ -30,7 +30,7 @@ namespace AmpyFileManager
                 }
                 if (!found)
                 {
-                    SelectCom s = new SelectCom();
+                    SelectComForm s = new SelectComForm();
                     s.ShowDialog();
                     COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
@@ -42,7 +42,7 @@ namespace AmpyFileManager
                     COMM_PORT = ports[0];
                 else
                 {
-                    SelectCom s = new SelectCom();
+                    SelectComForm s = new SelectComForm();
                     s.ShowDialog();
                     COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
