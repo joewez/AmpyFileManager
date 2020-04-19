@@ -56,26 +56,29 @@ ADDITIONAL INFO:
 - AMPY (https://github.com/scientifichackers/ampy) is an active project and as such, will change in a way that 
   sometimes breaks this application.  Currently this application is compatible with version 1.0.7.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
+  - The application defaults to 115200 baud for serial communications
   - Most settings are self-explanatory
   - If <b><i>ExternalTerminal</i></b> is set to "Y" the <b><i>TerminalApp</i></b>, <b><i>TerminalAppArgs</i></b> and 
     <b><i>TerminalAppTitle</i></b> settings are used
     - <b><i>TerminalApp</i></b> is the EXE to run
     - <b><i>TerminalAppArgs</i></b> are the arguments to run the terminal app with
-      - The term {PORT} in the <b><i>TerminalAppArgs</i></b> setting will be replaced at runtime with the current port
+      - The term <i>{PORT}</i> in this setting will be replaced at runtime with the current port
+      - The term <i>{PORTNUM}</i> in this setting will be replaced at runtime with the current port number
     - <b><i>TerminalAppTitle</i></b> is the title of the external window
     - Example:
 
-        <p>
+        <p>	
         &lt;add key="ExternalTerminal" value="Y" /&gt;<br />
         &lt;add key="TerminalApp" value="putty" /&gt;<br />
         &lt;add key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}" /&gt;<br />
-        &lt;add key="TerminalAppTitle" value="PuTTY" /&gt;<br />
+        &lt;add key="TerminalAppTitle" value="PuTTY" /&gt;<br />	
         </p>
         
         Invokes the putty.exe application and uses the "repl" session
   - The <b><i>EditExtensions</i></b> setting determines what types of files are editable (text)
+  - The <b><i>SaveDir</i></b> setting determines where session files are created, if blank the EXE location is used
   - <b><i>UniqueSessions</i></b> indicates if a single session directory is used or a new one for each program start
-    - The "session" directory is where the file being edited is held temporarily
+    - The "session" directory is where a file is stored while being edited
   - Color settings may be a WebColor name or a 3 value, comma-separated list of the RGB values to use
 
 CAVEATS:
