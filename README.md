@@ -35,21 +35,21 @@ All the features are pretty self-explanatory, but here is just a short descripti
   - To go back one directory click on the [..] entry at the top of the file list
     
 - Main Commands
-  - "New" will prepare a new file for editing
-  - "Open" will open a file for editing or change the directory
-  - "Load" will allow you to import a file from your computer
-  - "Export" will save the selected file to your computer
-  - "Delete" will delete the file from the device
-  - "Move" will move (rename) the selected file
-  - "MKDIR" will allow you to create a sub-folder
-  - "Refresh" will re-read the file list of the current directory
-  - "Run" will attempt to import/run the selected file
-  - "REPL" will open a MicroPython REPL window
+  - <b>New</b> will prepare a new file for editing
+  - <b>Open</b> will open a file for editing or change the directory
+  - <b>Load</b> will allow you to import a file from your computer
+  - <b>Export</b> will save the selected file to your computer
+  - <b>Delete</b> will delete the file or directory from the device
+  - <b>Move</b> will move (rename) the selected file
+  - <b>MKDIR</b> will allow you to create a sub-folder
+  - <b>Refresh</b> will re-read the file list of the current directory
+  - <b>Run</b> will attempt to import/run the selected file
+  - <b>REPL</b> will open a MicroPython REPL window
   
 - Editing Commands
-  - "Replace All" will do a simple search and replace on the current file being edited
-  - "Save As" will save the current file to the device using the name you give it in the current directory
-  - "Save" will save the current file to the device
+  - <b>Replace All</b> will do a simple search and replace on the current file being edited
+  - <b>Save As</b> will save the current file to the device using the name you give it in the current directory
+  - <b>Save</b> will save the current file to the device
 
 ADDITIONAL INFO:
 
@@ -57,10 +57,12 @@ ADDITIONAL INFO:
   sometimes breaks this application.  Currently this application is compatible with version 1.0.7.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
   - Most settings are self-explanatory
-  - If <b>ExternalTerminal</b> is set to "Y" the <b>TerminalApp</b> and <b>TerminalAppArgs</b> settings are used
-    - <b>TerminalApp</b> is the EXE to to run
-    - <b>TerminalAppArgs</b> are the arguments to run the terminal app with
-      - The term {PORT} in the <b>TerminalAppArgs</b> setting will be replaced at runtime with the current port
+  - If <b><i>ExternalTerminal</i></b> is set to "Y" the <b><i>TerminalApp</i></b>, <b><i>TerminalAppArgs</i></b> and 
+    <b><i>TerminalAppTitle</i></b> settings are used
+    - <b><i>TerminalApp</i></b> is the EXE to run
+    - <b><i>TerminalAppArgs</i></b> are the arguments to run the terminal app with
+      - The term {PORT} in the <b><i>TerminalAppArgs</i></b> setting will be replaced at runtime with the current port
+    - <b><i>TerminalAppTitle</i></b> is the title of the external window
     - Example:
 
         <p>
@@ -71,8 +73,8 @@ ADDITIONAL INFO:
         </p>
         
         Invokes the putty.exe application and uses the "repl" session
-  - The <b>EditExtensions</b> setting determines what types of files are editable (text)
-  - <b>UniqueSessions</b> indicates if a single session directory is used or a new one for each program start
+  - The <b><i>EditExtensions</i></b> setting determines what types of files are editable (text)
+  - <b><i>UniqueSessions</i></b> indicates if a single session directory is used or a new one for each program start
     - The "session" directory is where the file being edited is held temporarily
   - Color settings may be a WebColor name or a 3 value, comma-separated list of the RGB values to use
 
