@@ -23,6 +23,7 @@ HOW TO START:
 - Select the com port for your device (if there is more than one)
 - The main window should appear with the files on the root of the device listed
 - If there was a problem and the files were not listed, click on the Refresh button
+  (If you still do not see any files on your device your version of AMPY may be incompatible.  See below.)
 
 HOW TO USE:
 
@@ -32,7 +33,8 @@ All the features are pretty self-explanatory, but here is just a short descripti
   - To open a file for viewing or editing, select the file and click "Open" (or just double-click the filename)
   - To go into a sub-folder select the folder and click "Open" (or just double-click the folder name)
   - To go back one directory click on the [..] entry at the top of the file list
-- Commands
+    
+- Main Commands
   - "New" will prepare a new file for editing
   - "Open" will open a file for editing or change the directory
   - "Load" will allow you to import a file from your computer
@@ -41,11 +43,21 @@ All the features are pretty self-explanatory, but here is just a short descripti
   - "Move" will move (rename) the selected file
   - "MKDIR" will allow you to create a sub-folder
   - "Refresh" will re-read the file list of the current directory
+  - "Run" will attempt to import/run the selected file
+  - "REPL" will open a MicroPython REPL window
+  
+- Editing Commands
+  - "Replace All" will do a simple serach and replace on the current file being edited
+  - "Save As" will save the current file to the device using the name you give it in the current directory
+  - "Save" will save the current file to the device
 
 ADDITIONAL INFO:
 
+- AMPY is an active project and as such, will change in a way that sometimes breaks this application.  Currently this
+  application is compatible with version 1.0.7.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
-  - if <b>ExternalTerminal</b> is set to "Y" the <b>TerminalApp</b> and <b>TerminalAppArgs</b> settings are used
+  - Most settings are self-explanatory
+  - If <b>ExternalTerminal</b> is set to "Y" the <b>TerminalApp</b> and <b>TerminalAppArgs</b> settings are used
     - <b>TerminalApp</b> is the EXE to to run
     - <b>TerminalAppArgs</b> are the arguments to run the terminal app with
       - The term {PORT} in the <b>TerminalAppArgs</b> setting will be replaced at runtime with the current port
@@ -55,13 +67,14 @@ ADDITIONAL INFO:
         &lt;add key="ExternalTerminal" value="Y" /&gt;<br />
         &lt;add key="TerminalApp" value="putty" /&gt;<br />
         &lt;add key="TerminalAppArgs" value="-load &quot;repl&quot; -serial {PORT}" /&gt;<br />
+        &lt;add key="TerminalAppTitle" value="PuTTY" /&gt;<br />
         </p>
         
         Invokes the putty.exe application and uses the "repl" session
   - The <b>EditExtensions</b> setting determines what types of files are editable (text)
   - <b>UniqueSessions</b> indicates if a single session directory is used or a new one for each program start
     - The "session" directory is where the file being edited is held temporarily
-  - The remaining settings are self-explanatory
+  - Color settings may be a WebColor name or a 3 value, comma-separated list of the RGB values to use
 
 CAVEATS:
 
