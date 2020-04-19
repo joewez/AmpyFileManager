@@ -6,7 +6,7 @@ Windows GUI for the Adafruit MicroPython Utility
 
 A simple GUI wrapper that executes the AMPY command to manipulate the files on an ESP8266 board running MicroPython.
 
-It was written in C# in Visual Studio 2019, so you will need VS Express or better to compile it.  It's only external dependency (besides Python and Ampy) is the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET), which allows for Python3 syntax highlighting.
+It was written in C# in Visual Studio 2019, so you will need VS Express or better to compile it.  It uses the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET) to which allow for MicroPython syntax highlighting.
 
 As a development tool, I wrote the utility to mainly just edit the files directly off of the device.  I have also embedded a simple terminal emulator to send commands to the serial REPL.  The program works better though when paired with an external terminal such as puTTY or TeraTerm.  See the configuration notes below on how to set this up.
 
@@ -47,14 +47,14 @@ All the features are pretty self-explanatory, but here is just a short descripti
   - "REPL" will open a MicroPython REPL window
   
 - Editing Commands
-  - "Replace All" will do a simple serach and replace on the current file being edited
+  - "Replace All" will do a simple search and replace on the current file being edited
   - "Save As" will save the current file to the device using the name you give it in the current directory
   - "Save" will save the current file to the device
 
 ADDITIONAL INFO:
 
-- AMPY is an active project and as such, will change in a way that sometimes breaks this application.  Currently this
-  application is compatible with version 1.0.7.
+- AMPY (https://github.com/scientifichackers/ampy) is an active project and as such, will change in a way that 
+  sometimes breaks this application.  Currently this application is compatible with version 1.0.7.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
   - Most settings are self-explanatory
   - If <b>ExternalTerminal</b> is set to "Y" the <b>TerminalApp</b> and <b>TerminalAppArgs</b> settings are used
@@ -88,4 +88,4 @@ CAVEATS:
     - You may have to "Refresh" or try again to get a feature to work.
     - Sometimes the software will pause until the device is momentarily unplugged
     - This is highly dependent on the type of application that is running
-	- It is recommended yo use an external application (such as putty or TeraTerm) for the REPL
+	- It is recommended you use an external application (such as putty or TeraTerm) for the REPL
