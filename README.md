@@ -1,10 +1,10 @@
-# AmpyFileManager
+# Ampy File Manager
 Windows GUI for the Adafruit MicroPython Utility
 <p align="center">
   <img src="https://github.com/joewez/AmpyFileManager/blob/master/afm.jpg" alt="Screenshot"/>
 </p>
 
-A simple GUI wrapper that executes the AMPY command to manipulate the files on an ESP8266 board running MicroPython.
+A simple GUI wrapper that executes the AMPY (https://github.com/scientifichackers/ampy) command to manipulate the files on an ESP8266 board running MicroPython.
 
 It was written in C# in Visual Studio 2019, so you will need VS Express or better to compile it.  It uses the Scintilla editor control (https://github.com/jacobslusser/ScintillaNET) to which allow for MicroPython syntax highlighting.
 
@@ -16,7 +16,7 @@ A precompiled binary is available for download here:
   
 Just unzip to a convenient location and run the AmpyFileManager.exe. NOTE: The latest .Net Framework is required for this application to run.
 
-HOW TO START:
+<b>HOW TO START:</b>
 
 - Plug your MicroPython device into your computer and determine what com port it was assigned to
 - Start the application.
@@ -25,7 +25,7 @@ HOW TO START:
 - If there was a problem and the files were not listed, click on the Refresh button
   (If you still do not see any files on your device your version of AMPY may be incompatible.  See below.)
 
-HOW TO USE:
+<b>HOW TO USE:</b>
 
 All the features are pretty self-explanatory, but here is just a short description of it's general use.
 
@@ -51,10 +51,10 @@ All the features are pretty self-explanatory, but here is just a short descripti
   - <b>Save As</b> will save the current file to the device using the name you give it in the current directory
   - <b>Save</b> will save the current file to the device
 
-ADDITIONAL INFO:
+<b>ADDITIONAL INFO:</b>
 
-- AMPY (https://github.com/scientifichackers/ampy) is an active project and as such, will change in a way that 
-  sometimes breaks this application.  Currently this application is compatible with version 1.0.7.
+- AMPY is an active project and as such, will change in a way that sometimes breaks this application.
+  Currently this application is compatible with version 1.0.7.
 - Configuration setting are located in the AmpyFilemanager.exe.config file
   - The application defaults to 115200 baud for serial communications
   - Most settings are self-explanatory
@@ -81,7 +81,7 @@ ADDITIONAL INFO:
     - The "session" directory is where a file is stored while being edited
   - Color settings may be a WebColor name or a 3 value, comma-separated list of the RGB values to use
 
-CAVEATS:
+<b>CAVEATS:</b>
 
 - This editor is only meant to edit a single file at a time
 - Because of some limitations, in order to use this tool you must follow this guideline...
