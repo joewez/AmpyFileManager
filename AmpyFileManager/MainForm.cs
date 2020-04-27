@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScintillaNET;
 using WindowsInput;
+using AmpyFileManager.Properties;
 
 namespace AmpyFileManager
 {
@@ -103,6 +104,8 @@ namespace AmpyFileManager
             RefreshFileList();
 
             ResetNew();
+
+            GetWindowValue();
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -253,18 +256,16 @@ namespace AmpyFileManager
             {
                 if (!selectedItem.StartsWith(LBracket))
                 {
-                    if (_CurrentPath == "/" || _CurrentPath == "")
-                    {
-                        if (selectedItem.EndsWith(".py"))
+                    if (selectedItem.EndsWith(".py"))
+                        if (_CurrentPath == "/" || _CurrentPath == "")
                             OpenREPL("import " + selectedItem.Replace(".py", ""));
                         else
-                            MessageBox.Show("Can only run '.py' files in the root directory.", "Not Supported");
-                    }
+                            OpenREPL("from " + _CurrentPath.Substring(1) + " import " + selectedItem.Replace(".py", ""));
                     else
-                        MessageBox.Show("Can only run '.py' files in the root directory.", "Not Supported");
+                        MessageBox.Show("Can only run '.py' files.", "Not Supported");
                 }
                 else
-                    MessageBox.Show("Can only run '.py' files in the root directory.", "Not Supported");
+                    MessageBox.Show("Can only run '.py' files.", "Not Supported");
             }
         }
 
@@ -304,7 +305,10 @@ namespace AmpyFileManager
                 string ReplaceText = Decode(((TextBox)replaceAll.Controls["txtReplace"]).Text);
 
                 if (FindText != "")
+                {
                     scintilla1.Text = scintilla1.Text.Replace(FindText, ReplaceText);
+                    MessageBox.Show("Done.", "Global Search And Replace");
+                }
             }
         }
 
@@ -321,6 +325,7 @@ namespace AmpyFileManager
                 {
                     lblCurrentFile.Text = GetFileOnly(_CurrentFile);
                     _FileDirty = false;
+                    lblCurrentFile.ForeColor = Color.Black;
                     RefreshFileList();
                 }
                 else
@@ -336,6 +341,7 @@ namespace AmpyFileManager
         private void scintilla1_TextChanged(object sender, EventArgs e)
         {
             _FileDirty = true;
+            lblCurrentFile.ForeColor = Color.Red;
         }
 
         private void lstDirectory_DoubleClick(object sender, EventArgs e)
@@ -347,11 +353,35 @@ namespace AmpyFileManager
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !OKToContinue();
+            SaveWindowValue();
+        }
+
+        private void tmrMessage_Tick(object sender, EventArgs e)
+        {
+            pnlSaveMessage.Visible = false;
+            tmrMessage.Enabled = false;
         }
 
         #endregion
 
         #region Helper Routines
+
+        private void GetWindowValue()
+        {
+            Width = Settings.Default.WindowWidth;
+            Height = Settings.Default.WindowHeight;
+            Top = Settings.Default.WindowTop < 0 ? 0 : Settings.Default.WindowTop;
+            Left = Settings.Default.WindowLeft < 0 ? 0 : Settings.Default.WindowLeft;
+        }
+
+        private void SaveWindowValue()
+        {
+            Settings.Default.WindowHeight = Height;
+            Settings.Default.WindowWidth = Width;
+            Settings.Default.WindowLeft = Left;
+            Settings.Default.WindowTop = Top;
+            Settings.Default.Save();
+        }
 
         private string Decode(string codedString)
         {
@@ -371,6 +401,7 @@ namespace AmpyFileManager
             if (saved)
             {
                 _FileDirty = false;
+                lblCurrentFile.ForeColor = Color.Black;
                 if (doRefresh)
                     RefreshFileList();
             }
@@ -447,6 +478,7 @@ namespace AmpyFileManager
                             }
                             _FileDirty = false;
                             lblCurrentFile.Text = GetFileOnly(_CurrentFile);
+                            lblCurrentFile.ForeColor = Color.Black;
                         }
                     }
                     else
@@ -541,7 +573,7 @@ namespace AmpyFileManager
             }
             else
             {
-                result = SaveItem();
+                result = SaveItem();                
             }
 
             return result;
@@ -574,7 +606,11 @@ namespace AmpyFileManager
 
                 result = true;
 
-                MessageBox.Show("File Saved.");
+                pnlSaveMessage.Top = (scintilla1.Height - pnlSaveMessage.Height) / 2;
+                pnlSaveMessage.Left = (scintilla1.Width - pnlSaveMessage.Width) / 2;
+                pnlSaveMessage.Visible = true;
+                tmrMessage.Enabled = true;
+                //MessageBox.Show("File Saved.");
             }
             catch (Exception ex)
             {
@@ -590,6 +626,7 @@ namespace AmpyFileManager
             _CurrentFile = NEW_FILENAME;
             _FileDirty = false;
             lblCurrentFile.Text = _CurrentFile;
+            lblCurrentFile.ForeColor = Color.Black;
         }
 
         private void OpenREPL(string cmd)
@@ -697,26 +734,26 @@ namespace AmpyFileManager
             // Set the styles
             scintilla.Styles[Style.Python.Default].ForeColor = DecodeColor("Python.Default.ForeColor");
             scintilla.Styles[Style.Python.CommentLine].ForeColor = DecodeColor("Python.CommentLine.ForeColor");
-            scintilla.Styles[Style.Python.CommentLine].Italic = true;
+            scintilla.Styles[Style.Python.CommentLine].Italic = DecodeBoolean("Python.CommentLine.Italic");
             scintilla.Styles[Style.Python.Number].ForeColor = DecodeColor("Python.Number.ForeColor");
             scintilla.Styles[Style.Python.String].ForeColor = DecodeColor("Python.String.ForeColor");
             scintilla.Styles[Style.Python.Character].ForeColor = DecodeColor("Python.Character.ForeColor");
             scintilla.Styles[Style.Python.Word].ForeColor = DecodeColor("Python.Word.ForeColor");
-            scintilla.Styles[Style.Python.Word].Bold = true;
+            scintilla.Styles[Style.Python.Word].Bold = DecodeBoolean("Python.Word.Bold");
             scintilla.Styles[Style.Python.Triple].ForeColor = DecodeColor("Python.Triple.ForeColor");
             scintilla.Styles[Style.Python.TripleDouble].ForeColor = DecodeColor("Python.TripleDouble.ForeColor");
             scintilla.Styles[Style.Python.ClassName].ForeColor = DecodeColor("Python.ClassName.ForeColor");
-            scintilla.Styles[Style.Python.ClassName].Bold = true;
+            scintilla.Styles[Style.Python.ClassName].Bold = DecodeBoolean("Python.ClassName.Bold");
             scintilla.Styles[Style.Python.DefName].ForeColor = DecodeColor("Python.DefName.ForeColor");
-            scintilla.Styles[Style.Python.DefName].Bold = true;
-            scintilla.Styles[Style.Python.Operator].Bold = true;
+            scintilla.Styles[Style.Python.DefName].Bold = DecodeBoolean("Python.DefName.Bold");
+            scintilla.Styles[Style.Python.Operator].Bold = DecodeBoolean("Python.Operator.Bold");
             scintilla.Styles[Style.Python.Identifier].ForeColor = DecodeColor("Python.Identifier.ForeColor");
             scintilla.Styles[Style.Python.CommentBlock].ForeColor = DecodeColor("Python.CommentBlock.ForeColor");
-            scintilla.Styles[Style.Python.CommentBlock].Italic = true;
+            scintilla.Styles[Style.Python.CommentBlock].Italic = DecodeBoolean("Python.CommentBlock.Italic");
             scintilla.Styles[Style.Python.StringEol].ForeColor = DecodeColor("Python.StringEol.ForeColor");
             scintilla.Styles[Style.Python.StringEol].BackColor = DecodeColor("Python.StringEol.BackColor");
-            scintilla.Styles[Style.Python.StringEol].Bold = true;
-            scintilla.Styles[Style.Python.StringEol].FillLine = true;
+            scintilla.Styles[Style.Python.StringEol].Bold = DecodeBoolean("Python.StringEol.Bold");
+            scintilla.Styles[Style.Python.StringEol].FillLine = DecodeBoolean("Python.StringEol.FillLine");
             scintilla.Styles[Style.Python.Word2].ForeColor = DecodeColor("Python.Word2.ForeColor");
             scintilla.Styles[Style.Python.Decorator].ForeColor = DecodeColor("Python.Decorator.ForeColor");
 
@@ -773,6 +810,19 @@ namespace AmpyFileManager
                 color = Color.FromName(ColorSetting);
 
             return color;
+        }
+
+        private bool DecodeBoolean(string BooleanSettingName)
+        {
+            bool result = false;
+
+            string BooleanSetting = ConfigurationManager.AppSettings[BooleanSettingName];
+            if (!String.IsNullOrEmpty(BooleanSetting) && BooleanSetting.Trim().ToUpper().Substring(0, 1) == "Y")
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         #endregion

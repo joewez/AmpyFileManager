@@ -15,6 +15,7 @@ namespace AmpyFileManager
     public partial class TerminalForm : Form
     {
         private string _command = string.Empty;
+        private bool _command_run = false;
         private string _readBuffer = string.Empty;
         private int _bufferLimit = 16384;
         private int _bufferResetSize = 2048;
@@ -53,8 +54,10 @@ namespace AmpyFileManager
 
         private void TerminalForm_Activated(object sender, EventArgs e)
         {
-            serialPort1.Open();
-            timer1.Enabled = true;
+            if (!serialPort1.IsOpen)
+                serialPort1.Open();
+            if (!_command_run)
+                timer1.Enabled = true;
         }
 
         private void TerminalForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -70,6 +73,7 @@ namespace AmpyFileManager
                 serialPort1.Write(_command);
                 serialPort1.Write("\r");
             }
+            _command_run = true;
         }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)

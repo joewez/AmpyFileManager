@@ -68,6 +68,9 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.pnlSaveMessage = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tmrMessage = new System.Windows.Forms.Timer(this.components);
             this.pnlToolbar.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitter)).BeginInit();
@@ -80,6 +83,7 @@
             this.pnlFileToolbar.SuspendLayout();
             this.panel10.SuspendLayout();
             this.panel9.SuspendLayout();
+            this.pnlSaveMessage.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlToolbar
@@ -276,11 +280,12 @@
             // 
             // mainSplitter.Panel2
             // 
+            this.mainSplitter.Panel2.Controls.Add(this.pnlSaveMessage);
             this.mainSplitter.Panel2.Controls.Add(this.scintilla1);
             this.mainSplitter.Panel2.Controls.Add(this.pnlFileStatus);
             this.mainSplitter.Panel2.Controls.Add(this.pnlFileToolbar);
             this.mainSplitter.Size = new System.Drawing.Size(1046, 599);
-            this.mainSplitter.SplitterDistance = 345;
+            this.mainSplitter.SplitterDistance = 269;
             this.mainSplitter.TabIndex = 1;
             // 
             // lstDirectory
@@ -293,7 +298,7 @@
             this.lstDirectory.ItemHeight = 22;
             this.lstDirectory.Location = new System.Drawing.Point(0, 31);
             this.lstDirectory.Name = "lstDirectory";
-            this.lstDirectory.Size = new System.Drawing.Size(345, 540);
+            this.lstDirectory.Size = new System.Drawing.Size(269, 540);
             this.lstDirectory.TabIndex = 18;
             this.lstDirectory.DoubleClick += new System.EventHandler(this.lstDirectory_DoubleClick);
             // 
@@ -306,7 +311,7 @@
             this.pnlPatthStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlPatthStatus.Location = new System.Drawing.Point(0, 571);
             this.pnlPatthStatus.Name = "pnlPatthStatus";
-            this.pnlPatthStatus.Size = new System.Drawing.Size(345, 28);
+            this.pnlPatthStatus.Size = new System.Drawing.Size(269, 28);
             this.pnlPatthStatus.TabIndex = 17;
             // 
             // lblFileCount
@@ -354,7 +359,7 @@
             this.pnlPathTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlPathTop.Location = new System.Drawing.Point(0, 0);
             this.pnlPathTop.Name = "pnlPathTop";
-            this.pnlPathTop.Size = new System.Drawing.Size(345, 31);
+            this.pnlPathTop.Size = new System.Drawing.Size(269, 31);
             this.pnlPathTop.TabIndex = 15;
             // 
             // lblCurrentDirectory
@@ -363,7 +368,7 @@
             this.lblCurrentDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentDirectory.Location = new System.Drawing.Point(77, 0);
             this.lblCurrentDirectory.Name = "lblCurrentDirectory";
-            this.lblCurrentDirectory.Size = new System.Drawing.Size(268, 31);
+            this.lblCurrentDirectory.Size = new System.Drawing.Size(192, 31);
             this.lblCurrentDirectory.TabIndex = 8;
             this.lblCurrentDirectory.Text = "<current path>";
             this.lblCurrentDirectory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -394,7 +399,7 @@
             this.scintilla1.Lexer = ScintillaNET.Lexer.Python;
             this.scintilla1.Location = new System.Drawing.Point(0, 31);
             this.scintilla1.Name = "scintilla1";
-            this.scintilla1.Size = new System.Drawing.Size(697, 540);
+            this.scintilla1.Size = new System.Drawing.Size(773, 540);
             this.scintilla1.TabIndex = 19;
             this.scintilla1.TextChanged += new System.EventHandler(this.scintilla1_TextChanged);
             // 
@@ -403,7 +408,7 @@
             this.pnlFileStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlFileStatus.Location = new System.Drawing.Point(0, 571);
             this.pnlFileStatus.Name = "pnlFileStatus";
-            this.pnlFileStatus.Size = new System.Drawing.Size(697, 28);
+            this.pnlFileStatus.Size = new System.Drawing.Size(773, 28);
             this.pnlFileStatus.TabIndex = 18;
             // 
             // pnlFileToolbar
@@ -414,7 +419,7 @@
             this.pnlFileToolbar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlFileToolbar.Location = new System.Drawing.Point(0, 0);
             this.pnlFileToolbar.Name = "pnlFileToolbar";
-            this.pnlFileToolbar.Size = new System.Drawing.Size(697, 31);
+            this.pnlFileToolbar.Size = new System.Drawing.Size(773, 31);
             this.pnlFileToolbar.TabIndex = 0;
             // 
             // lblCurrentFile
@@ -423,7 +428,7 @@
             this.lblCurrentFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentFile.Location = new System.Drawing.Point(77, 0);
             this.lblCurrentFile.Name = "lblCurrentFile";
-            this.lblCurrentFile.Size = new System.Drawing.Size(399, 31);
+            this.lblCurrentFile.Size = new System.Drawing.Size(475, 31);
             this.lblCurrentFile.TabIndex = 9;
             this.lblCurrentFile.Text = "<current file>";
             this.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -434,7 +439,7 @@
             this.panel10.Controls.Add(this.btnSaveAs);
             this.panel10.Controls.Add(this.btnSave);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel10.Location = new System.Drawing.Point(476, 0);
+            this.panel10.Location = new System.Drawing.Point(552, 0);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(221, 31);
             this.panel10.TabIndex = 8;
@@ -496,6 +501,31 @@
             // 
             this.saveFileDialog1.Title = "Export File";
             // 
+            // pnlSaveMessage
+            // 
+            this.pnlSaveMessage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlSaveMessage.Controls.Add(this.label5);
+            this.pnlSaveMessage.Location = new System.Drawing.Point(220, 295);
+            this.pnlSaveMessage.Name = "pnlSaveMessage";
+            this.pnlSaveMessage.Size = new System.Drawing.Size(295, 49);
+            this.pnlSaveMessage.TabIndex = 20;
+            this.pnlSaveMessage.Visible = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(17, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(255, 15);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "File Saved And Uploaded Successfully.";
+            // 
+            // tmrMessage
+            // 
+            this.tmrMessage.Interval = 800;
+            this.tmrMessage.Tick += new System.EventHandler(this.tmrMessage_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -524,6 +554,8 @@
             this.panel10.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
+            this.pnlSaveMessage.ResumeLayout(false);
+            this.pnlSaveMessage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -568,5 +600,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label lblFolderCount;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel pnlSaveMessage;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Timer tmrMessage;
     }
 }
