@@ -98,3 +98,16 @@ All the features are pretty self-explanatory, but here is just a short descripti
     - Sometimes the software will pause until the device is momentarily unplugged
     - This is highly dependent on the type of application that is running
 	- It is recommended you use an external application (such as putty or TeraTerm) for the REPL
+
+<b>ROADMAP:</b>
+
+- Support multiple files editing at one time
+    - Split window functionality for file compares
+- Provide proper editing functions
+    - Simple edit commands
+    - Simple find
+    - Python formatting cleanup
+    - Highlighting support for other text file types (html, xml, etc,,,)
+- Replace AMPY with integral communication routines to the ESP8266
+    - Remove directory naming limitation
+- Proper options selection window.

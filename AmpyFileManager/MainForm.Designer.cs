@@ -55,22 +55,22 @@
             this.lblCurrentDirectory = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.pnlSaveMessage = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.scintilla1 = new ScintillaNET.Scintilla();
             this.pnlFileStatus = new System.Windows.Forms.Panel();
             this.pnlFileToolbar = new System.Windows.Forms.Panel();
             this.lblCurrentFile = new System.Windows.Forms.Label();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.btnReplaceAll = new System.Windows.Forms.Button();
-            this.btnSaveAs = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.pnlSaveMessage = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.tmrMessage = new System.Windows.Forms.Timer(this.components);
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.btnReplaceAll = new System.Windows.Forms.Button();
+            this.btnSaveAs = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.pnlToolbar.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitter)).BeginInit();
@@ -80,10 +80,11 @@
             this.pnlPatthStatus.SuspendLayout();
             this.pnlPathTop.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.pnlFileToolbar.SuspendLayout();
-            this.panel10.SuspendLayout();
-            this.panel9.SuspendLayout();
             this.pnlSaveMessage.SuspendLayout();
+            this.pnlFileStatus.SuspendLayout();
+            this.pnlFileToolbar.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.panel10.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlToolbar
@@ -391,6 +392,26 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "Current Path:";
             // 
+            // pnlSaveMessage
+            // 
+            this.pnlSaveMessage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlSaveMessage.Controls.Add(this.label5);
+            this.pnlSaveMessage.Location = new System.Drawing.Point(220, 295);
+            this.pnlSaveMessage.Name = "pnlSaveMessage";
+            this.pnlSaveMessage.Size = new System.Drawing.Size(295, 49);
+            this.pnlSaveMessage.TabIndex = 20;
+            this.pnlSaveMessage.Visible = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(17, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(255, 15);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "File Saved And Uploaded Successfully.";
+            // 
             // scintilla1
             // 
             this.scintilla1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -399,22 +420,22 @@
             this.scintilla1.Lexer = ScintillaNET.Lexer.Python;
             this.scintilla1.Location = new System.Drawing.Point(0, 31);
             this.scintilla1.Name = "scintilla1";
-            this.scintilla1.Size = new System.Drawing.Size(773, 540);
+            this.scintilla1.Size = new System.Drawing.Size(773, 539);
             this.scintilla1.TabIndex = 19;
             this.scintilla1.TextChanged += new System.EventHandler(this.scintilla1_TextChanged);
             // 
             // pnlFileStatus
             // 
+            this.pnlFileStatus.Controls.Add(this.panel10);
             this.pnlFileStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlFileStatus.Location = new System.Drawing.Point(0, 571);
+            this.pnlFileStatus.Location = new System.Drawing.Point(0, 570);
             this.pnlFileStatus.Name = "pnlFileStatus";
-            this.pnlFileStatus.Size = new System.Drawing.Size(773, 28);
+            this.pnlFileStatus.Size = new System.Drawing.Size(773, 29);
             this.pnlFileStatus.TabIndex = 18;
             // 
             // pnlFileToolbar
             // 
             this.pnlFileToolbar.Controls.Add(this.lblCurrentFile);
-            this.pnlFileToolbar.Controls.Add(this.panel10);
             this.pnlFileToolbar.Controls.Add(this.panel9);
             this.pnlFileToolbar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlFileToolbar.Location = new System.Drawing.Point(0, 0);
@@ -428,51 +449,10 @@
             this.lblCurrentFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentFile.Location = new System.Drawing.Point(77, 0);
             this.lblCurrentFile.Name = "lblCurrentFile";
-            this.lblCurrentFile.Size = new System.Drawing.Size(475, 31);
+            this.lblCurrentFile.Size = new System.Drawing.Size(696, 31);
             this.lblCurrentFile.TabIndex = 9;
             this.lblCurrentFile.Text = "<current file>";
             this.lblCurrentFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // panel10
-            // 
-            this.panel10.Controls.Add(this.btnReplaceAll);
-            this.panel10.Controls.Add(this.btnSaveAs);
-            this.panel10.Controls.Add(this.btnSave);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel10.Location = new System.Drawing.Point(552, 0);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(221, 31);
-            this.panel10.TabIndex = 8;
-            // 
-            // btnReplaceAll
-            // 
-            this.btnReplaceAll.Location = new System.Drawing.Point(12, 4);
-            this.btnReplaceAll.Name = "btnReplaceAll";
-            this.btnReplaceAll.Size = new System.Drawing.Size(72, 22);
-            this.btnReplaceAll.TabIndex = 17;
-            this.btnReplaceAll.Text = "Replace All";
-            this.btnReplaceAll.UseVisualStyleBackColor = true;
-            this.btnReplaceAll.Click += new System.EventHandler(this.btnReplaceAll_Click);
-            // 
-            // btnSaveAs
-            // 
-            this.btnSaveAs.Location = new System.Drawing.Point(87, 4);
-            this.btnSaveAs.Name = "btnSaveAs";
-            this.btnSaveAs.Size = new System.Drawing.Size(72, 22);
-            this.btnSaveAs.TabIndex = 15;
-            this.btnSaveAs.Text = "Save As...";
-            this.btnSaveAs.UseVisualStyleBackColor = true;
-            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(162, 4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(53, 22);
-            this.btnSave.TabIndex = 16;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // panel9
             // 
@@ -501,30 +481,51 @@
             // 
             this.saveFileDialog1.Title = "Export File";
             // 
-            // pnlSaveMessage
-            // 
-            this.pnlSaveMessage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pnlSaveMessage.Controls.Add(this.label5);
-            this.pnlSaveMessage.Location = new System.Drawing.Point(220, 295);
-            this.pnlSaveMessage.Name = "pnlSaveMessage";
-            this.pnlSaveMessage.Size = new System.Drawing.Size(295, 49);
-            this.pnlSaveMessage.TabIndex = 20;
-            this.pnlSaveMessage.Visible = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(17, 15);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(255, 15);
-            this.label5.TabIndex = 21;
-            this.label5.Text = "File Saved And Uploaded Successfully.";
-            // 
             // tmrMessage
             // 
             this.tmrMessage.Interval = 800;
             this.tmrMessage.Tick += new System.EventHandler(this.tmrMessage_Tick);
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.btnReplaceAll);
+            this.panel10.Controls.Add(this.btnSaveAs);
+            this.panel10.Controls.Add(this.btnSave);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel10.Location = new System.Drawing.Point(552, 0);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(221, 29);
+            this.panel10.TabIndex = 9;
+            // 
+            // btnReplaceAll
+            // 
+            this.btnReplaceAll.Location = new System.Drawing.Point(3, 4);
+            this.btnReplaceAll.Name = "btnReplaceAll";
+            this.btnReplaceAll.Size = new System.Drawing.Size(72, 22);
+            this.btnReplaceAll.TabIndex = 17;
+            this.btnReplaceAll.Text = "Replace All";
+            this.btnReplaceAll.UseVisualStyleBackColor = true;
+            this.btnReplaceAll.Click += new System.EventHandler(this.btnReplaceAll_Click);
+            // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.Location = new System.Drawing.Point(79, 4);
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(72, 22);
+            this.btnSaveAs.TabIndex = 15;
+            this.btnSaveAs.Text = "Save As...";
+            this.btnSaveAs.UseVisualStyleBackColor = true;
+            this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(154, 4);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(53, 22);
+            this.btnSave.TabIndex = 16;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // frmMain
             // 
@@ -550,12 +551,13 @@
             this.pnlPathTop.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.pnlFileToolbar.ResumeLayout(false);
-            this.panel10.ResumeLayout(false);
-            this.panel9.ResumeLayout(false);
-            this.panel9.PerformLayout();
             this.pnlSaveMessage.ResumeLayout(false);
             this.pnlSaveMessage.PerformLayout();
+            this.pnlFileStatus.ResumeLayout(false);
+            this.pnlFileToolbar.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            this.panel10.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -584,10 +586,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel10;
-        private System.Windows.Forms.Button btnReplaceAll;
-        private System.Windows.Forms.Button btnSaveAs;
-        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label lblCurrentFile;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -603,5 +601,9 @@
         private System.Windows.Forms.Panel pnlSaveMessage;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Timer tmrMessage;
+        private System.Windows.Forms.Panel panel10;
+        private System.Windows.Forms.Button btnReplaceAll;
+        private System.Windows.Forms.Button btnSaveAs;
+        private System.Windows.Forms.Button btnSave;
     }
 }

@@ -37,6 +37,7 @@
             // 
             // txtDisplay
             // 
+            this.txtDisplay.AcceptsTab = true;
             this.txtDisplay.BackColor = System.Drawing.Color.Black;
             this.txtDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDisplay.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

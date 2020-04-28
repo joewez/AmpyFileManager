@@ -112,6 +112,10 @@ namespace AmpyFileManager
                 byte[] b = { 27, 91, 66 };
                 serialPort1.Write(b, 0, 3);
             }
+            else if (e.KeyCode == Keys.Tab)
+            {
+                serialPort1.Write("\t");
+            }
             else if ((e.KeyCode == Keys.V && e.Control) || (e.KeyCode == Keys.Insert && e.Shift))
             {
                 serialPort1.Write(Clipboard.GetText());
