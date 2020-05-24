@@ -72,7 +72,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TerminalForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Serial Terminal";
+            this.Text = "MicroPython REPL";
             this.Activated += new System.EventHandler(this.TerminalForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TerminalForm_FormClosing);
             this.Load += new System.EventHandler(this.TerminalForm_Load);

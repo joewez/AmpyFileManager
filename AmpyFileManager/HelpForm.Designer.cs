@@ -52,7 +52,8 @@
             this.Name = "HelpForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Help";
-            this.Load += new System.EventHandler(this.Help_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HelpForm_FormClosing);
+            this.Load += new System.EventHandler(this.HelpForm_Load);
             this.ResumeLayout(false);
 
         }

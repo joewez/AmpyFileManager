@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using AmpyFileManager.Properties;
+using System;
 using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AmpyFileManager
@@ -33,23 +28,8 @@ namespace AmpyFileManager
             txtDisplay.Font = new Font(ConfigurationManager.AppSettings["TerminalFont"], Convert.ToSingle(ConfigurationManager.AppSettings["TerminalFontSize"]), FontStyle.Bold);
             txtDisplay.BackColor = DecodeColor("TerminalBackColor");
             txtDisplay.ForeColor = DecodeColor("TerminalForeColor");
-        }
 
-        private Color DecodeColor(string ColorSettingName)
-        {
-            Color color = new Color();
-
-            string ColorSetting = ConfigurationManager.AppSettings[ColorSettingName];
-
-            if (ColorSetting.Contains(","))
-            {
-                string[] rgb = ColorSetting.Split(',');
-                color = Color.FromArgb(Convert.ToInt32(rgb[0]), Convert.ToInt32(rgb[1]), Convert.ToInt32(rgb[2]));
-            }
-            else
-                color = Color.FromName(ColorSetting);
-
-            return color;
+            GetWindowValue();
         }
 
         private void TerminalForm_Activated(object sender, EventArgs e)
@@ -58,11 +38,6 @@ namespace AmpyFileManager
                 serialPort1.Open();
             if (!_command_run)
                 timer1.Enabled = true;
-        }
-
-        private void TerminalForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            serialPort1.Close();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -135,6 +110,12 @@ namespace AmpyFileManager
             {
                 Debug.WriteLine(ex.Message);
             }
+        }
+
+        private void TerminalForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            serialPort1.Close();
+            SaveWindowValue();
         }
 
         public void DoUpdate(object sender, System.EventArgs e)
@@ -227,6 +208,40 @@ namespace AmpyFileManager
                 Debug.WriteLine("DoUpdate() Error:" + ex.Message);
             }
         
+        }
+
+        private Color DecodeColor(string ColorSettingName)
+        {
+            Color color = new Color();
+
+            string ColorSetting = ConfigurationManager.AppSettings[ColorSettingName];
+
+            if (ColorSetting.Contains(","))
+            {
+                string[] rgb = ColorSetting.Split(',');
+                color = Color.FromArgb(Convert.ToInt32(rgb[0]), Convert.ToInt32(rgb[1]), Convert.ToInt32(rgb[2]));
+            }
+            else
+                color = Color.FromName(ColorSetting);
+
+            return color;
+        }
+
+        private void GetWindowValue()
+        {
+            Width = Settings.Default.REPLWidth;
+            Height = Settings.Default.REPLHeight;
+            Top = Settings.Default.REPLTop < 0 ? 0 : Settings.Default.REPLTop;
+            Left = Settings.Default.REPLLeft < 0 ? 0 : Settings.Default.REPLLeft;
+        }
+
+        private void SaveWindowValue()
+        {
+            Settings.Default.REPLHeight = Height;
+            Settings.Default.REPLWidth = Width;
+            Settings.Default.REPLLeft = Left;
+            Settings.Default.REPLTop = Top;
+            Settings.Default.Save();
         }
 
     }

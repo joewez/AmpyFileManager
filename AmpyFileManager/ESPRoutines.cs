@@ -5,8 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AmpyFileManager
@@ -19,11 +17,29 @@ namespace AmpyFileManager
         {
             string[] ports = SerialPort.GetPortNames();
 
+            List<string> goodPorts = new List<string>();
+            string exclusions = ConfigurationManager.AppSettings["CommPortExclusions"];
+            string[] nums = exclusions.Split(',');
+            foreach (string port in ports)
+            {
+                bool excluded = false;
+                foreach (string portnum in nums)
+                {
+                    if (port == "COM" + portnum)
+                    {
+                        excluded = true;
+                        break;
+                    }
+                }
+                if (!excluded)
+                    goodPorts.Add(port);
+            }
+
             COMM_PORT = ConfigurationManager.AppSettings["CommPort"];
             if (!String.IsNullOrEmpty(COMM_PORT))
             {
                 bool found = false;
-                foreach (string port in ports)
+                foreach (string port in goodPorts)
                 {
                     if (port == COMM_PORT)
                         found = true;
@@ -31,6 +47,9 @@ namespace AmpyFileManager
                 if (!found)
                 {
                     SelectComForm s = new SelectComForm();
+                    ((ComboBox)s.Controls["cboPorts"]).Items.Clear();
+                    foreach (string port in goodPorts.OrderBy(g => Convert.ToInt32(g.Substring(3))).ToArray())
+                        ((ComboBox)s.Controls["cboPorts"]).Items.Add(port);
                     s.ShowDialog();
                     COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
@@ -38,16 +57,18 @@ namespace AmpyFileManager
             }
             else
             {
-                if (ports.Count() == 1)
-                    COMM_PORT = ports[0];
+                if (goodPorts.Count() == 1)
+                    COMM_PORT = goodPorts[0];
                 else
                 {
                     SelectComForm s = new SelectComForm();
+                    ((ComboBox)s.Controls["cboPorts"]).Items.Clear();
+                    foreach (string port in goodPorts.OrderBy(g => Convert.ToInt32(g.Substring(3))).ToArray())
+                        ((ComboBox)s.Controls["cboPorts"]).Items.Add(port);
                     s.ShowDialog();
                     COMM_PORT = s.SELECTED_COMM_PORT;
                     s.Dispose();
                 }
-                //ConfigurationManager.AppSettings["CommPort"] = COMM_PORT;
             }
 
             string baudratestr = ConfigurationManager.AppSettings["BaudRate"];

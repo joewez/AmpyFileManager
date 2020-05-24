@@ -70,5 +70,101 @@ namespace AmpyFileManager.Properties {
                 this["WindowLeft"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
+        public int REPLHeight {
+            get {
+                return ((int)(this["REPLHeight"]));
+            }
+            set {
+                this["REPLHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int REPLWidth {
+            get {
+                return ((int)(this["REPLWidth"]));
+            }
+            set {
+                this["REPLWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int REPLTop {
+            get {
+                return ((int)(this["REPLTop"]));
+            }
+            set {
+                this["REPLTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int REPLLeft {
+            get {
+                return ((int)(this["REPLLeft"]));
+            }
+            set {
+                this["REPLLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int HelpHeight {
+            get {
+                return ((int)(this["HelpHeight"]));
+            }
+            set {
+                this["HelpHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int HelpWidth {
+            get {
+                return ((int)(this["HelpWidth"]));
+            }
+            set {
+                this["HelpWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int HelpLeft {
+            get {
+                return ((int)(this["HelpLeft"]));
+            }
+            set {
+                this["HelpLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int HelpTop {
+            get {
+                return ((int)(this["HelpTop"]));
+            }
+            set {
+                this["HelpTop"] = value;
+            }
+        }
     }
 }

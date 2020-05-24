@@ -1,19 +1,15 @@
-﻿using System;
+﻿using AmpyFileManager.Properties;
+using ScintillaNET;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ScintillaNET;
 using WindowsInput;
-using AmpyFileManager.Properties;
 
 namespace AmpyFileManager
 {
@@ -89,7 +85,9 @@ namespace AmpyFileManager
             toolTip1.SetToolTip(btnSave, "Save the current file");
             toolTip1.SetToolTip(btnSaveAs, "Save the current file to the current directory with the specified name");
             toolTip1.SetToolTip(btnReplaceAll, "Simple search-and-replace for current file");
-            toolTip1.SetToolTip(cboHelp, "Help Links");
+            toolTip1.SetToolTip(cboHelp, "Local Help Documents");
+            toolTip1.SetToolTip(btnBackupScript, "Generate a DOS batch file that will backup the contents of the current device.");
+            toolTip1.SetToolTip(btnRestoreScript, "Generate a DOS batch file that will restore a previous backup.");
 
             // these are the file that can be opened and edited
             _EditableExtensions = ConfigurationManager.AppSettings["EditExtensions"];
@@ -98,6 +96,8 @@ namespace AmpyFileManager
 
             lstDirectory.BackColor = DecodeColor("ExplorerColor");
             lstDirectory.Font = new Font(ConfigurationManager.AppSettings["DirectoryFont"], Convert.ToSingle(ConfigurationManager.AppSettings["DirectoryFontSize"]), FontStyle.Regular);
+            btnBackupScript.Visible = ((ConfigurationManager.AppSettings["ShowBatchButtons"]).ToUpper().Trim() == "Y");
+            btnRestoreScript.Visible = ((ConfigurationManager.AppSettings["ShowBatchButtons"]).ToUpper().Trim() == "Y");
 
             ConfigureForPython(scintilla1);
 
@@ -105,7 +105,7 @@ namespace AmpyFileManager
 
             ResetNew();
 
-            GetWindowValue();
+            RestoreWindow();
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -353,7 +353,7 @@ namespace AmpyFileManager
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !OKToContinue();
-            SaveWindowValue();
+            SaveWindow();
         }
 
         private void tmrMessage_Tick(object sender, EventArgs e)
@@ -362,11 +362,37 @@ namespace AmpyFileManager
             tmrMessage.Enabled = false;
         }
 
+        private void btnRestoreScript_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Generate Restore Batch File";
+            saveFileDialog1.FileName = "restore.bat";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                MakeRestoreScript(saveFileDialog1.FileName);
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Done.", "Generate Restore");
+            }
+        }
+
+        private void btnBackupScript_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Title = "Generate Backup Batch File";
+            saveFileDialog1.FileName = "backup.bat";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                MakeBackupScript(saveFileDialog1.FileName);
+                Cursor.Current = Cursors.Default;
+                MessageBox.Show("Done.", "Generate Backup");
+            }
+        }
+
         #endregion
 
         #region Helper Routines
 
-        private void GetWindowValue()
+        private void RestoreWindow()
         {
             Width = Settings.Default.WindowWidth;
             Height = Settings.Default.WindowHeight;
@@ -374,7 +400,7 @@ namespace AmpyFileManager
             Left = Settings.Default.WindowLeft < 0 ? 0 : Settings.Default.WindowLeft;
         }
 
-        private void SaveWindowValue()
+        private void SaveWindow()
         {
             Settings.Default.WindowHeight = Height;
             Settings.Default.WindowWidth = Width;
@@ -610,7 +636,6 @@ namespace AmpyFileManager
                 pnlSaveMessage.Left = (scintilla1.Width - pnlSaveMessage.Width) / 2;
                 pnlSaveMessage.Visible = true;
                 tmrMessage.Enabled = true;
-                //MessageBox.Show("File Saved.");
             }
             catch (Exception ex)
             {
@@ -631,7 +656,7 @@ namespace AmpyFileManager
 
         private void OpenREPL(string cmd)
         {
-            if (ConfigurationManager.AppSettings["ExternalTerminal"] == "Y")
+            if (ConfigurationManager.AppSettings["REPL"] == "E")
             {
                 Process p = new Process();
                 p.StartInfo.UseShellExecute = false;
@@ -660,6 +685,15 @@ namespace AmpyFileManager
 
                 p.WaitForExit();
             }
+            //else if (ConfigurationManager.AppSettings["REPL"] == "R")
+            //{
+            //    RebexForm replForm = new RebexForm(_ESP.COMM_PORT, _ESP.BAUD_RATE, cmd);
+            //    if (replForm.ShowDialog() == DialogResult.Yes)
+            //    {
+            //        RebexForm replForm2 = new RebexForm(_ESP.COMM_PORT, _ESP.BAUD_RATE, cmd);
+            //        replForm2.ShowDialog();
+            //    }                
+            //}
             else
             {
                 TerminalForm terminal = new TerminalForm(_ESP.COMM_PORT, _ESP.BAUD_RATE, cmd);
@@ -823,6 +857,123 @@ namespace AmpyFileManager
             }
 
             return result;
+        }
+
+        private void MakeBackupScript(string output)
+        {
+            List<string> files = new List<string>();
+            addfiles("/", ref files, true);
+            string msg = "";
+            foreach (string item in files)
+            {
+                if (item.StartsWith(LBracket))
+                    msg += item.Substring(1, item.Length - 2) + CRLF;
+                else
+                {
+                    string revitem = item.Replace("/", "\\");
+                    if (EditableFile(item))
+                        msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " get " + item + " " + revitem.Substring(1) + CRLF;
+                    else
+                        msg += "REM ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " get " + item + " " + revitem.Substring(1) + CRLF;
+                }
+            }
+            using (StreamWriter sw = new StreamWriter(output))
+            {
+                sw.Write(msg);
+            }
+        }
+
+        private void MakeRestoreScript(string output)
+        {
+            List<string> files = new List<string>();
+            addfiles("/", ref files, false);
+            string msg = "";
+            foreach (string item in files)
+            {
+                string revitem = item.Replace("/", "\\");
+                if (item.StartsWith(LBracket))
+                    msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " " + item.Substring(1, item.Length - 2) + CRLF;
+                else
+                    msg += "ampy -p " + _ESP.COMM_PORT + " -b " + _ESP.BAUD_RATE.ToString() + " put " + revitem.Substring(1) + " " + item + CRLF;
+            }
+            using (StreamWriter sw = new StreamWriter(output))
+            {
+                sw.Write(msg);
+            }
+        }
+
+        private void addfiles(string path, ref List<string> files, bool forBackup)
+        {
+            List<string> items = _ESP.GetDir(path, LBracket, RBracket);
+            foreach (string item in items)
+                if (!item.StartsWith(LBracket))
+                {
+                    if (path.EndsWith("/"))
+                        files.Add(path + item);
+                    else
+                        files.Add(path + "/" + item);
+                }
+            foreach (string item in items)
+                if (item.StartsWith(LBracket))
+                {
+                    string newdir = item.Substring(1, item.Length - 2);
+                    string newpath = path;
+                    if (newpath.EndsWith("/"))
+                        newpath += newdir;
+                    else
+                        newpath += "/" + newdir;
+
+                    if (forBackup)
+                    {
+                        int dirCount = 0;
+                        if (path != "/")
+                        {
+                            string[] dirs = path.Substring(1).Split('/');
+                            foreach (string dir in dirs)
+                                files.Add(LBracket + "cd " + dir + RBracket);
+                            dirCount = dirs.Length;
+                        }
+                        files.Add(LBracket + "mkdir " + newdir + RBracket);
+                        if (path != "/")
+                        {
+                            for (int i = 1; i <= dirCount; i++)
+                                files.Add(LBracket + "cd .." + RBracket);
+                        }
+                    }
+                    else
+                    {
+                        files.Add(LBracket + "mkdir " + newpath.Substring(1) + RBracket);
+                    }
+
+                    addfiles(newpath, ref files, forBackup);
+                }
+
+        }
+
+        private void CleanFile(string FileToClean)
+        {
+            if (File.Exists(FileToClean))
+            {
+                string text = File.ReadAllText(FileToClean);
+                if (text.Contains("\n"))
+                    text = text.Replace("\r", "");
+                else
+                    text = text.Replace("\r", "\n");
+                File.WriteAllText(FileToClean, text);
+            }
+        }
+
+        private void CleanPath(string RootPath)
+        {
+            string[] files = Directory.GetFiles(RootPath);
+            foreach (string file in files)
+            {
+                if (EditableFile(file))
+                    CleanFile(file);
+            }
+            string[] dirs = Directory.GetDirectories(RootPath);
+            foreach (string dir in dirs)
+                CleanPath(dir);
         }
 
         #endregion

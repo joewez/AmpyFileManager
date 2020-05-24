@@ -52,7 +52,7 @@ namespace AmpyFileManager
         {
             this.Text = "Ampy File Manager (" + _ESP.COMM_PORT + ")";
 
-            _externalTerminal = (ConfigurationManager.AppSettings["ExternalTerminal"] == "Y");
+            _externalTerminal = (ConfigurationManager.AppSettings["REPL"] == "E");
             if (_externalTerminal)
             {
                 _terminalApp = ConfigurationManager.AppSettings["TerminalApp"];

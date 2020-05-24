@@ -117,7 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>It is nice because it supports full ANSI terminal commands so it can be used with the 'pye.py' script to edit files in the terminal window.  It also has full support of all the MicroPython REPL key functions such as CTRL-E for 'Paste' mode.  All of this was easy enough to implement in an afternoon, with very little actual coding needed.
+
+But this turns out to only cover the core functionality of the library.  It's actually meant to make implementing full blown SSH and Telnet clients a breeze.  That's not needed here, but if you are looking for that kind of functionality, I highly recommend giving the Rebex library a try.</value>
+  </data>
 </root>

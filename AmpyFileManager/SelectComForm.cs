@@ -17,10 +17,10 @@ namespace AmpyFileManager
 
         private void SelectCom_Load(object sender, EventArgs e)
         {
-            cboPorts.Items.Clear();
-            string[] ports = SerialPort.GetPortNames().OrderBy(s => Convert.ToInt32(s.Substring(3))).ToArray();
-            foreach (string port in ports)
-                cboPorts.Items.Add(port);
+            //cboPorts.Items.Clear();
+            //string[] ports = SerialPort.GetPortNames().OrderBy(s => Convert.ToInt32(s.Substring(3))).ToArray();
+            //foreach (string port in ports)
+            //    cboPorts.Items.Add(port);
         }
 
         private void btnOK_Click(object sender, EventArgs e)
